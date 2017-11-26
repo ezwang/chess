@@ -3,7 +3,23 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class Game implements Runnable {
+    private JFrame frame;
+
     public void run() {
+        frame = new JFrame("Multiplayer Chess");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setContentPane(new IntroPanel(this));
+        frame.pack();
+        frame.setVisible(true);
+    }
+
+    public void setContent(JPanel panel) {
+        frame.setContentPane(panel);
+        this.resizeWindow();
+    }
+
+    public void resizeWindow() {
+        frame.pack();
     }
 
     /**

@@ -3,3 +3,8 @@ bin/
 *.swp
 *.swo
 *.class
+
+.classpath
+.project
+.idea/
+chess.iml
