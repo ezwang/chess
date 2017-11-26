@@ -1,6 +1,8 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
@@ -9,6 +11,8 @@ import java.util.*;
 public class BoardPanel extends JPanel {
     public static final int SQUARE_SIZE = 64;
     private GameState state;
+    private Location selected;
+    private Set<Location> allowed;
 
     private Map<String, Image> images = new TreeMap<String, Image>();
 
@@ -16,6 +20,45 @@ public class BoardPanel extends JPanel {
         this.state = state;
 
         loadImages();
+
+        BoardPanel t = this;
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                if (!state.isPlayerTurn()) {
+                    return;
+                }
+
+                int x = mouseEvent.getX() / SQUARE_SIZE;
+                int y = mouseEvent.getY() / SQUARE_SIZE;
+
+                Piece p = state.getPiece(x, state.playerIsWhite() ? 7-y : y);
+
+                if (p != null) {
+                    // if the piece is not the same color as the player
+                    // then the player cannot move the piece
+                    if (p.getIsWhite() != state.isWhiteTurn()) {
+                        return;
+                    }
+
+                    Location mv = new Location(x, y);
+                    if (selected != null) {
+                        if (selected.equals(mv)) {
+                            selected = null;
+                            allowed = null;
+                        }
+                        else if (allowed.contains(mv)) {
+                            // TODO: move
+                        }
+                    }
+                    else {
+                        selected = mv;
+                        allowed = p.getMovableLocations();
+                    }
+                }
+                t.repaint();
+            }
+        });
     }
 
     /**
@@ -41,11 +84,30 @@ public class BoardPanel extends JPanel {
         super.paintComponent(g);
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
+                boolean whiteSquare = false;
                 if ((j + i) % 2 == (state.playerIsWhite() ? 0 : 1)) {
                     g.setColor(Color.WHITE);
+                    whiteSquare = true;
                 }
                 else {
                     g.setColor(Color.BLACK);
+                }
+                Location curr = new Location(i, j);
+                if (curr.equals(selected)) {
+                    if (whiteSquare) {
+                        g.setColor(Color.GREEN);
+                    }
+                    else {
+                        g.setColor(Color.GREEN.darker().darker());
+                    }
+                }
+                else if (allowed != null && allowed.contains(new Location(i, state.playerIsWhite() ? 7-j : j))) {
+                    if (whiteSquare) {
+                        g.setColor(Color.BLUE);
+                    }
+                    else {
+                        g.setColor(Color.BLUE.darker().darker());
+                    }
                 }
                 g.fillRect(SQUARE_SIZE * i, SQUARE_SIZE * j, SQUARE_SIZE * (i + 1), SQUARE_SIZE * (j + 1));
                 Piece p = state.getPiece(i, state.playerIsWhite() ? 7-j : j);

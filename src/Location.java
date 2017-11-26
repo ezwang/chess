@@ -3,9 +3,6 @@ public class Location implements Comparable<Location> {
     private int y;
 
     public Location(int x, int y) {
-        if (x < 0 || y < 0 || x > 7 || y > 7) {
-            throw new IllegalArgumentException();
-        }
         this.x = x;
         this.y = y;
     }

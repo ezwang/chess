@@ -4,10 +4,13 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class GamePanel extends JPanel {
-    BoardPanel board;
+    private BoardPanel board;
+    private JLabel turn;
+    private GameState state;
 
     public GamePanel(GameState state) {
         this.setLayout(new BorderLayout());
+        this.state = state;
 
         JPanel info = new JPanel();
         info.setLayout(new BorderLayout());
@@ -17,7 +20,7 @@ public class GamePanel extends JPanel {
         names.setForeground(Color.GRAY);
         info.add(names, BorderLayout.NORTH);
 
-        JLabel turn = new JLabel(state.isPlayerTurn() ?"Your Turn" : "Opponent's Turn", SwingConstants.CENTER);
+        turn = new JLabel(state.isPlayerTurn() ?"Your Turn" : "Opponent's Turn", SwingConstants.CENTER);
         turn.setForeground(Color.BLACK);
         info.add(turn, BorderLayout.CENTER);
 
@@ -25,5 +28,10 @@ public class GamePanel extends JPanel {
 
         board = new BoardPanel(state);
         this.add(board, BorderLayout.CENTER);
+    }
+
+    public void update() {
+        turn.setText(state.isPlayerTurn() ?"Your Turn" : "Opponent's Turn");
+        board.repaint();
     }
 }

@@ -17,12 +17,14 @@ public class PacketNickname implements Packet {
         c.setNickname(nick);
 
         ServerConnection match = c.getServer().getMatch(c);
-        if (match != null) {
-            // start match with other player
-            c.setOpponent(match);
-            match.setOpponent(c);
+        if (match == null) {
             return;
         }
+
+        // start game with other player
+
+        c.setOpponent(match);
+        match.setOpponent(c);
 
         Packet p = new PacketStart(c.getNickname(), match.getNickname(), true);
         Packet p2 = new PacketStart(match.getNickname(), c.getNickname(), false);
