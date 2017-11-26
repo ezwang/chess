@@ -16,13 +16,19 @@ public class Pawn extends Piece {
                 isInitial = true;
             }
             if (gameState.onBoard(loc.getX(), loc.getY() + 1)) {
-                if (!gameState.isSameColor(loc.getX(), loc.getY() + 1, isWhite)) {
+                if (!gameState.isOccupied(loc.getX(), loc.getY() + 1)) {
                     moves.add(loc.translate(0, 1));
                 }
                 if (isInitial) {
-                    if (!gameState.isOccupied(loc.getX(), loc.getY() + 1) && !gameState.isSameColor(loc.getX(), loc.getY() + 2, isWhite)) {
+                    if (!gameState.isOccupied(loc.getX(), loc.getY() + 1)) {
                         moves.add(loc.translate(0, 2));
                     }
+                }
+                if (gameState.isDifferentColor(loc.getX() + 1, loc.getY() + 1, isWhite)) {
+                    moves.add(loc.translate(1, 1));
+                }
+                if (gameState.isDifferentColor(loc.getX() - 1, loc.getY() + 1, isWhite)) {
+                    moves.add(loc.translate(-1, 1));
                 }
             }
         }
@@ -31,13 +37,19 @@ public class Pawn extends Piece {
                 isInitial = true;
             }
             if (gameState.onBoard(loc.getX(), loc.getY() - 1)) {
-                if (!gameState.isSameColor(loc.getX(), loc.getY() - 1, isWhite)) {
+                if (!gameState.isOccupied(loc.getX(), loc.getY() - 1)) {
                     moves.add(loc.translate(0, -1));
                 }
                 if (isInitial) {
-                    if (!gameState.isOccupied(loc.getX(), loc.getY() - 1) && !gameState.isSameColor(loc.getX(), loc.getY() - 2, isWhite)) {
+                    if (!gameState.isOccupied(loc.getX(), loc.getY() - 1)) {
                         moves.add(loc.translate(0, -2));
                     }
+                }
+                if (gameState.isDifferentColor(loc.getX() + 1, loc.getY() - 1, isWhite)) {
+                    moves.add(loc.translate(1, -1));
+                }
+                if (gameState.isDifferentColor(loc.getX() - 1, loc.getY() - 1, isWhite)) {
+                    moves.add(loc.translate(-1, -1));
                 }
             }
         }
