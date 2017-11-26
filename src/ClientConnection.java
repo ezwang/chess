@@ -45,8 +45,7 @@ public class ClientConnection implements Runnable {
      * @param isWhite Whether or not the current player is white.
      */
     public void startGame(String oppNick, boolean isWhite) {
-        // TODO: set nickname, color
-        state = new GameState();
+        state = new GameState(nick, oppNick, isWhite);
         gui = new GamePanel(state);
         game.setContent(gui);
     }

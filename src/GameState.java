@@ -1,10 +1,38 @@
 public class GameState {
     private Piece[][] board;
+    private String player, opponent;
+    private boolean isWhite;
+    private boolean isWhiteTurn;
 
-    public GameState() {
+    public GameState(String player, String opponent, boolean isWhite) {
+        this.player = player;
+        this.opponent = opponent;
+        this.isWhite = isWhite;
+        this.isWhiteTurn = true;
+
         board = new Piece[8][8];
 
         setupBoard();
+    }
+
+    public String getPlayerNickname() {
+        return player;
+    }
+
+    public String getOpponentNickname() {
+        return opponent;
+    }
+
+    public boolean playerIsWhite() {
+        return isWhite;
+    }
+
+    public boolean isWhiteTurn() {
+        return isWhiteTurn;
+    }
+
+    public boolean isPlayerTurn() {
+        return isWhiteTurn == isWhite;
     }
 
     public void setupBoard() {
@@ -17,7 +45,6 @@ public class GameState {
             board[1][j] = new Pawn(true, this, new Location(j, 1));
             board[6][j] = new Pawn(false, this, new Location(j, 6));
         }
-        // TODO: switch position of queen/king
         board[0][0] = new Rook(true, this, new Location(0, 0));
         board[0][7] = new Rook(true, this, new Location(7, 0));
         board[0][1] = new Knight(true, this, new Location(1, 0));

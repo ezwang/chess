@@ -41,14 +41,14 @@ public class BoardPanel extends JPanel {
         super.paintComponent(g);
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if ((j + i) % 2 == 0) {
+                if ((j + i) % 2 == (state.playerIsWhite() ? 0 : 1)) {
                     g.setColor(Color.WHITE);
                 }
                 else {
                     g.setColor(Color.BLACK);
                 }
                 g.fillRect(SQUARE_SIZE * i, SQUARE_SIZE * j, SQUARE_SIZE * (i + 1), SQUARE_SIZE * (j + 1));
-                Piece p = state.getPiece(i, 7-j);
+                Piece p = state.getPiece(i, state.playerIsWhite() ? 7-j : j);
                 if (p != null) {
                     String color = p.getIsWhite() ? "l" : "d";
                     g.drawImage(images.get(p.getNotationSymbol() + color),SQUARE_SIZE * i, SQUARE_SIZE * j, null);
