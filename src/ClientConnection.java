@@ -14,6 +14,7 @@ public class ClientConnection implements Runnable {
 
     private Game game;
     private GamePanel gui;
+    private GameState state;
 
     private DataOutputStream out;
 
@@ -27,17 +28,32 @@ public class ClientConnection implements Runnable {
         gson = new GsonBuilder().create();
     }
 
+    /**
+     * Sends a packet to the server.
+     * @param p The packet to send to the server.
+     * @throws IOException
+     */
     public void sendPacket(Packet p) throws IOException {
         out.writeUTF(p.getClass().getName());
         out.writeUTF(gson.toJson(p));
         out.flush();
     }
 
-    public void startGame() {
-        gui = new GamePanel();
+    /**
+     * Move away from the introduction screen and start the game.
+     * @param oppNick The nickname of the opponent.
+     * @param isWhite Whether or not the current player is white.
+     */
+    public void startGame(String oppNick, boolean isWhite) {
+        // TODO: set nickname, color
+        state = new GameState();
+        gui = new GamePanel(state);
         game.setContent(gui);
     }
 
+    /**
+     * Send player nickname to the server.
+     */
     public void sendNickname() {
         try {
             Packet p = new PacketNickname(nick);

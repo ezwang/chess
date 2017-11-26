@@ -14,4 +14,8 @@ public abstract class Piece {
 
     public abstract Set<Location> getMovableLocations();
     public abstract String getNotationSymbol();
+
+    public boolean getIsWhite() {
+        return isWhite;
+    }
 }

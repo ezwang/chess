@@ -24,17 +24,17 @@ public class GameState {
         board[0][6] = new Knight(true, this, new Location(6, 0));
         board[0][2] = new Bishop(true, this, new Location(2, 0));
         board[0][5] = new Bishop(true, this, new Location(5, 0));
-        board[0][3] = new King(true, this, new Location(3, 0));
-        board[0][4] = new Queen(true, this, new Location(4, 0));
+        board[0][3] = new Queen(true, this, new Location(3, 0));
+        board[0][4] = new King(true, this, new Location(4, 0));
 
-        board[7][0] = new Rook(true, this, new Location(0, 7));
-        board[7][7] = new Rook(true, this, new Location(7, 7));
-        board[7][1] = new Knight(true, this, new Location(1, 7));
-        board[7][6] = new Knight(true, this, new Location(6, 7));
-        board[7][2] = new Bishop(true, this, new Location(2, 7));
-        board[7][5] = new Bishop(true, this, new Location(5, 7));
-        board[7][3] = new King(true, this, new Location(3, 7));
-        board[7][4] = new Queen(true, this, new Location(4, 7));
+        board[7][0] = new Rook(false, this, new Location(0, 7));
+        board[7][7] = new Rook(false, this, new Location(7, 7));
+        board[7][1] = new Knight(false, this, new Location(1, 7));
+        board[7][6] = new Knight(false, this, new Location(6, 7));
+        board[7][2] = new Bishop(false, this, new Location(2, 7));
+        board[7][5] = new Bishop(false, this, new Location(5, 7));
+        board[7][3] = new Queen(false, this, new Location(3, 7));
+        board[7][4] = new King(false, this, new Location(4, 7));
     }
     public Piece getPiece(int x, int y) {
         if (x < 0 || y < 0 || x > 7 || y > 7) {
