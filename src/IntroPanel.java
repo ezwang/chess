@@ -41,7 +41,7 @@ public class IntroPanel extends JPanel {
         ipField = new JTextField("127.0.0.1");
         clientSettings.add(ipField);
         clientSettings.add(new JLabel("Nickname: "));
-        nicknameField = new JTextField();
+        nicknameField = new JTextField(getRandomNickname());
         clientSettings.add(nicknameField);
         clientStatusLabel = new JLabel();
         clientStatusLabel.setForeground(Color.BLUE);
@@ -113,6 +113,16 @@ public class IntroPanel extends JPanel {
         controls.add(serverStatusLabel, BorderLayout.SOUTH);
 
         this.add(controls, BorderLayout.SOUTH);
+    }
+
+    /**
+     * Create a random nickname from a verb and a noun.
+     * @return A randomly generated nickname.
+     */
+    private String getRandomNickname() {
+        String[] verbs = new String[] { "Red", "Orange", "Yellow", "Green", "Blue", "Purple", "Amazing", "Sad", "Happy" };
+        String[] nouns = new String[] { "Laser", "Potato", "Tomato", "Apple", "Pineapple", "Blueberry", "Strawberry", "Pear" };
+        return verbs[(int)(Math.random() * verbs.length)] + nouns[(int)(Math.random() * nouns.length)];
     }
 
     private void toggleControls(boolean enabled) {
