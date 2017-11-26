@@ -38,7 +38,12 @@ public class ServerConnection implements Runnable {
                 }
                 catch (EOFException ex) {
                     // client has disconnected
-                    opponent.sendPacket(new PacketDisconnect());
+                    if (opponent != null) {
+                        opponent.sendPacket(new PacketDisconnect());
+                    }
+                    else {
+                        server.removeFromQueue(this);
+                    }
                     break;
                 }
                 try {
@@ -80,5 +85,14 @@ public class ServerConnection implements Runnable {
 
     public ServerConnection getOpponent() {
         return opponent;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o.getClass() != ServerConnection.class) {
+            return false;
+        }
+        ServerConnection c = (ServerConnection)o;
+        return c.socket == socket;
     }
 }

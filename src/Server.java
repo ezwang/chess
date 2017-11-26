@@ -96,4 +96,8 @@ public class Server implements Runnable {
             // ignore
         }
     }
+
+    public void removeFromQueue(ServerConnection sc) {
+        queue.remove(sc);
+    }
 }
