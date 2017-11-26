@@ -75,7 +75,7 @@ public class GameState {
     }
 
     public boolean isOccupied(int x, int y) {
-        return board[y][x] != null;
+        return onBoard(x, y) && board[y][x] != null;
     }
 
     public boolean isSameColor(int x, int y, boolean isWhite) {

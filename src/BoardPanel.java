@@ -40,7 +40,7 @@ public class BoardPanel extends JPanel {
                         selected = null;
                         allowed = null;
                     }
-                    else if (allowed.contains(mv)) {
+                    else if (allowed != null && allowed.contains(mv)) {
                         Packet movePacket = new PacketMove(selected, mv);
                         try {
                             client.sendPacket(movePacket);
