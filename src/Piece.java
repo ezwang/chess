@@ -18,4 +18,8 @@ public abstract class Piece {
     public boolean getIsWhite() {
         return isWhite;
     }
+
+    public void setNewLocation(Location loc) {
+        this.loc = loc;
+    }
 }

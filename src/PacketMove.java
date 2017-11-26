@@ -15,6 +15,7 @@ public class PacketMove implements Packet {
         Piece p = state.getPiece(old.getX(), old.getY());
         state.setPiece(old.getX(), old.getY(), null);
         state.setPiece(now.getX(), now.getY(), p);
+        p.setNewLocation(now);
         c.update();
     }
 
