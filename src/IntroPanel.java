@@ -116,12 +116,12 @@ public class IntroPanel extends JPanel {
     }
 
     /**
-     * Create a random nickname from a verb and a noun.
+     * Create a random nickname from an adjective and a noun.
      * @return A randomly generated nickname.
      */
     private String getRandomNickname() {
-        String[] verbs = new String[] { "Red", "Orange", "Yellow", "Green", "Blue", "Purple", "Amazing", "Sad", "Happy" };
-        String[] nouns = new String[] { "Laser", "Potato", "Tomato", "Apple", "Pineapple", "Blueberry", "Strawberry", "Pear" };
+        String[] verbs = new String[] { "Red", "Orange", "Yellow", "Green", "Blue", "Purple", "Amazing", "Sad", "Happy", "Indigo" };
+        String[] nouns = new String[] { "Laser", "Potato", "Tomato", "Apple", "Pineapple", "Blueberry", "Strawberry", "Pear", "Computer", "Mouse" };
         return verbs[(int)(Math.random() * verbs.length)] + nouns[(int)(Math.random() * nouns.length)];
     }
 

@@ -21,6 +21,7 @@ public class PacketNickname implements Packet {
             // start match with other player
             c.setOpponent(match);
             match.setOpponent(c);
+            return;
         }
 
         Packet p = new PacketStart(c.getNickname(), match.getNickname(), true);
