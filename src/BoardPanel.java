@@ -16,7 +16,7 @@ public class BoardPanel extends JPanel {
 
     private Map<String, Image> images = new TreeMap<String, Image>();
 
-    public BoardPanel(GameState state) {
+    public BoardPanel(GameState state, ClientConnection client) {
         this.state = state;
 
         loadImages();
@@ -33,28 +33,34 @@ public class BoardPanel extends JPanel {
                 int y = mouseEvent.getY() / SQUARE_SIZE;
 
                 Piece p = state.getPiece(x, state.playerIsWhite() ? 7-y : y);
+                Location mv = new Location(x, state.playerIsWhite() ? 7-y : y);
 
-                if (p != null) {
+                if (selected != null) {
+                    if (selected.equals(mv)) {
+                        selected = null;
+                        allowed = null;
+                    }
+                    else if (allowed.contains(mv)) {
+                        Packet movePacket = new PacketMove(selected, mv);
+                        try {
+                            client.sendPacket(movePacket);
+                        }
+                        catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        selected = null;
+                        allowed = null;
+                    }
+                }
+                else if (p != null) {
                     // if the piece is not the same color as the player
                     // then the player cannot move the piece
                     if (p.getIsWhite() != state.isWhiteTurn()) {
                         return;
                     }
 
-                    Location mv = new Location(x, y);
-                    if (selected != null) {
-                        if (selected.equals(mv)) {
-                            selected = null;
-                            allowed = null;
-                        }
-                        else if (allowed.contains(mv)) {
-                            // TODO: move
-                        }
-                    }
-                    else {
-                        selected = mv;
-                        allowed = p.getMovableLocations();
-                    }
+                    selected = mv;
+                    allowed = p.getMovableLocations();
                 }
                 t.repaint();
             }
@@ -92,7 +98,7 @@ public class BoardPanel extends JPanel {
                 else {
                     g.setColor(Color.BLACK);
                 }
-                Location curr = new Location(i, j);
+                Location curr = new Location(i, state.playerIsWhite() ? 7-j : j);
                 if (curr.equals(selected)) {
                     if (whiteSquare) {
                         g.setColor(Color.GREEN);
@@ -101,7 +107,7 @@ public class BoardPanel extends JPanel {
                         g.setColor(Color.GREEN.darker().darker());
                     }
                 }
-                else if (allowed != null && allowed.contains(new Location(i, state.playerIsWhite() ? 7-j : j))) {
+                else if (allowed != null && allowed.contains(curr)) {
                     if (whiteSquare) {
                         g.setColor(Color.BLUE);
                     }

@@ -7,10 +7,12 @@ public class GamePanel extends JPanel {
     private BoardPanel board;
     private JLabel turn;
     private GameState state;
+    private ClientConnection client;
 
-    public GamePanel(GameState state) {
+    public GamePanel(GameState state, ClientConnection c) {
         this.setLayout(new BorderLayout());
         this.state = state;
+        this.client = c;
 
         JPanel info = new JPanel();
         info.setLayout(new BorderLayout());
@@ -26,12 +28,16 @@ public class GamePanel extends JPanel {
 
         this.add(info, BorderLayout.WEST);
 
-        board = new BoardPanel(state);
+        board = new BoardPanel(state, c);
         this.add(board, BorderLayout.CENTER);
     }
 
     public void update() {
         turn.setText(state.isPlayerTurn() ?"Your Turn" : "Opponent's Turn");
         board.repaint();
+    }
+
+    public void endGame() {
+        turn.setText("Game Ended");
     }
 }

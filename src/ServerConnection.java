@@ -30,15 +30,24 @@ public class ServerConnection implements Runnable {
         try {
             DataInputStream in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 
-            String type = in.readUTF();
-            String packet = in.readUTF();
-            try {
-                Packet p = (Packet)gson.fromJson(packet, Class.forName(type));
-                p.processServer(this);
-            }
-            catch (ClassNotFoundException ex) {
-                // TODO; handle this
-                ex.printStackTrace();
+            while (true) {
+                String type, packet;
+                try {
+                    type = in.readUTF();
+                    packet = in.readUTF();
+                }
+                catch (EOFException ex) {
+                    // client has disconnected
+                    opponent.sendPacket(new PacketDisconnect());
+                    break;
+                }
+                try {
+                    Packet p = (Packet) gson.fromJson(packet, Class.forName(type));
+                    p.processServer(this);
+                } catch (ClassNotFoundException ex) {
+                    // TODO; handle this
+                    ex.printStackTrace();
+                }
             }
         }
         catch (IOException e) {
@@ -67,5 +76,9 @@ public class ServerConnection implements Runnable {
 
     public String getNickname() {
         return nickname;
+    }
+
+    public ServerConnection getOpponent() {
+        return opponent;
     }
 }

@@ -9,7 +9,7 @@ public class PacketStart implements Packet {
     }
 
     @Override
-    public void processClient(ClientConnection c) throws UnsupportedOperationException {
+    public void processClient(ClientConnection c) {
         // TODO: implement game start
         if (isWhite) {
             c.startGame(blackNick, isWhite);

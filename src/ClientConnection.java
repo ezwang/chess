@@ -39,6 +39,10 @@ public class ClientConnection implements Runnable {
         out.flush();
     }
 
+    public GameState getGameState() {
+        return state;
+    }
+
     /**
      * Move away from the introduction screen and start the game.
      * @param oppNick The nickname of the opponent.
@@ -46,7 +50,7 @@ public class ClientConnection implements Runnable {
      */
     public void startGame(String oppNick, boolean isWhite) {
         state = new GameState(nick, oppNick, isWhite);
-        gui = new GamePanel(state);
+        gui = new GamePanel(state, this);
         game.setContent(gui);
     }
 
@@ -120,5 +124,13 @@ public class ClientConnection implements Runnable {
             ex.printStackTrace();
             return false;
         }
+    }
+
+    public void update() {
+        gui.update();
+    }
+
+    public void endGame() {
+        gui.endGame();
     }
 }

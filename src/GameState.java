@@ -85,4 +85,14 @@ public class GameState {
     public boolean isDifferentColor(int x, int y, boolean isWhite) {
         return isOccupied(x, y) && board[y][x].isWhite != isWhite;
     }
+
+    public void setPiece(int x, int y, Piece p) {
+        if (x >= 0 && y >= 0 && x < 8 && y < 8) {
+            board[y][x] = p;
+        }
+    }
+
+    public void togglePlayerTurn() {
+        isWhiteTurn = !isWhiteTurn;
+    }
 }
