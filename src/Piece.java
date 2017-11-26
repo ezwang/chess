@@ -1,6 +1,17 @@
 import java.util.*;
 
-public interface Piece {
-    public Set<Location> getMovableLocations();
-    public String getNotationSymbol();
+public abstract class Piece {
+    protected Location loc;
+
+    protected boolean isWhite;
+    protected GameState gameState;
+
+    public Piece(boolean isWhite, GameState state, Location loc) {
+        this.isWhite = isWhite;
+        this.gameState = state;
+        this.loc = loc;
+    }
+
+    public abstract Set<Location> getMovableLocations();
+    public abstract String getNotationSymbol();
 }

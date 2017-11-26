@@ -1,4 +1,4 @@
-public class Location {
+public class Location implements Comparable<Location> {
     private int x;
     private int y;
 
@@ -41,8 +41,33 @@ public class Location {
         }
     }
 
+    public Location translate(int x, int y) {
+        return new Location(this.x + x, this.y + y);
+    }
+
+    public Location translate(Location l) {
+        return new Location(this.x + l.getX(), this.y + l.getY());
+    }
+
     @Override
     public String toString() {
         return getLetterFromNumber(x) + (y + 1);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || o.getClass() != Location.class) {
+            return false;
+        }
+        Location l = (Location) o;
+        return l.x == x && l.y == y;
+    }
+
+    @Override
+    public int compareTo(Location l) {
+        if (l.y == y) {
+            return x - l.x;
+        }
+        return y - l.y;
     }
 }
