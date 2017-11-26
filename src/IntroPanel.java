@@ -1,11 +1,12 @@
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
+import javax.swing.border.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
+import java.awt.event.*;
+import java.io.*;
 
+/**
+ * The panel that is shown when the application first starts.
+ */
 public class IntroPanel extends JPanel {
     private Game game;
 
@@ -36,7 +37,8 @@ public class IntroPanel extends JPanel {
         clientSettings.setBorder(new EmptyBorder(0, 0, 0, 10));
         clientSettings.setLayout(new GridLayout(0, 2));
         clientSettings.add(new JLabel("Server IP: "));
-        ipField = new JTextField();
+        // set to local computer as a reasonable default
+        ipField = new JTextField("127.0.0.1");
         clientSettings.add(ipField);
         clientSettings.add(new JLabel("Nickname: "));
         nicknameField = new JTextField();
@@ -57,6 +59,24 @@ public class IntroPanel extends JPanel {
                 else {
                     toggleControls(false);
                     clientStatusLabel.setText("Connecting...");
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            ClientConnection client = new ClientConnection(ip, nick, game);
+                            if (!client.checkValidHost()) {
+                                clientStatusLabel.setText("Invalid IP!");
+                                toggleControls(true);
+                            }
+                            else if (!client.connect()) {
+                                clientStatusLabel.setText("Failed to connect!");
+                                toggleControls(true);
+                            }
+                            else {
+                                clientStatusLabel.setText("Matchmaking...");
+                                client.sendNickname();
+                            }
+                        }
+                    });
                 }
             }
         });

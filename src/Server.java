@@ -1,10 +1,31 @@
 import java.io.*;
 import java.net.*;
 import java.util.Enumeration;
+import java.util.LinkedList;
+import java.util.List;
 
+/**
+ * Handles new connections and delegates them to a ServerConnection instance.
+ */
 public class Server implements Runnable {
     Thread thread;
     ServerSocket server;
+
+    List<ServerConnection> queue;
+
+    public Server() {
+         queue = new LinkedList<ServerConnection>();
+    }
+
+    public ServerConnection getMatch(ServerConnection other) {
+        if (queue.isEmpty()) {
+            queue.add(other);
+            return null;
+        }
+        else {
+            return queue.remove(0);
+        }
+    }
 
     @Override
     public void run() {
@@ -18,6 +39,7 @@ public class Server implements Runnable {
                     // server has been stopped
                     return;
                 }
+                // TODO
                 e.printStackTrace();
             }
         }
@@ -71,7 +93,7 @@ public class Server implements Runnable {
             thread = null;
         }
         catch (IOException e) {
-            e.printStackTrace();
+            // ignore
         }
     }
 }
