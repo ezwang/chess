@@ -10,7 +10,10 @@ import java.util.*;
 
 public class BoardPanel extends JPanel {
     public static final int SQUARE_SIZE = 64;
+    public static final int BORDER_WIDTH = 24;
+
     private GameState state;
+    private ClientConnection client;
     private Location selected;
     private Set<Location> allowed;
 
@@ -21,6 +24,7 @@ public class BoardPanel extends JPanel {
 
     public BoardPanel(GameState state, ClientConnection client) {
         this.state = state;
+        this.client = client;
 
         blackInCheck = false;
         whiteInCheck = false;
@@ -114,6 +118,7 @@ public class BoardPanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        g.translate(BORDER_WIDTH, BORDER_WIDTH);
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 boolean whiteSquare = false;
@@ -152,7 +157,7 @@ public class BoardPanel extends JPanel {
                         g.setColor(Color.BLUE.darker().darker());
                     }
                 }
-                g.fillRect(SQUARE_SIZE * i, SQUARE_SIZE * j, SQUARE_SIZE * (i + 1), SQUARE_SIZE * (j + 1));
+                g.fillRect(SQUARE_SIZE * i, SQUARE_SIZE * j, SQUARE_SIZE, SQUARE_SIZE);
                 if (p != null) {
                     String color = p.getIsWhite() ? "l" : "d";
                     g.drawImage(images.get(p.getNotationSymbol() + color),SQUARE_SIZE * i, SQUARE_SIZE * j, null);
@@ -163,7 +168,7 @@ public class BoardPanel extends JPanel {
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(SQUARE_SIZE * 8, SQUARE_SIZE * 8);
+        return new Dimension(SQUARE_SIZE * 8 + BORDER_WIDTH * 2, SQUARE_SIZE * 8 + BORDER_WIDTH * 2);
     }
 
     private boolean blackInCheck;
