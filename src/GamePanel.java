@@ -23,6 +23,7 @@ public class GamePanel extends JPanel {
         info.add(names, BorderLayout.NORTH);
 
         turn = new JLabel(state.isPlayerTurn() ?"Your Turn" : "Opponent's Turn", SwingConstants.CENTER);
+        turn.setFont(new Font("Lucidia", Font.BOLD, 24));
         turn.setForeground(Color.BLACK);
         info.add(turn, BorderLayout.CENTER);
 

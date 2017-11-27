@@ -50,13 +50,13 @@ public class ServerConnection implements Runnable {
                     Packet p = (Packet) gson.fromJson(packet, Class.forName(type));
                     p.processServer(this);
                 } catch (ClassNotFoundException ex) {
-                    // TODO; handle this
+                    // TODO: handle this
                     ex.printStackTrace();
                 }
             }
         }
         catch (IOException e) {
-            // TODO
+            // TODO: handle this
             e.printStackTrace();
         }
     }

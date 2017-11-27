@@ -10,7 +10,7 @@ import java.util.*;
 
 public class BoardPanel extends JPanel {
     public static final int SQUARE_SIZE = 64;
-    public static final int BORDER_WIDTH = 24;
+    public static final int BORDER_WIDTH = 30;
 
     private GameState state;
     private ClientConnection client;
@@ -19,6 +19,8 @@ public class BoardPanel extends JPanel {
 
     private final Color BOARD_LIGHT = Color.decode("#FED496");
     private final Color BOARD_DARK = Color.decode("#D09137");
+
+    private final Font BOARD_FONT = new Font("Lucidia", Font.BOLD, 18);
 
     private Map<String, Image> images;
 
@@ -119,6 +121,12 @@ public class BoardPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.translate(BORDER_WIDTH, BORDER_WIDTH);
+        g.setFont(BOARD_FONT);
+        g.setColor(Color.GRAY.brighter());
+        for (int i = 0; i < 8; i++) {
+            g.drawString(""+(state.playerIsWhite() ? 8-i : i + 1), -18, i*SQUARE_SIZE + SQUARE_SIZE/2 + 9);
+            g.drawString(Character.toString((char)(i + 65)), i*SQUARE_SIZE + SQUARE_SIZE/2 - 9, -6);
+        }
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 boolean whiteSquare = false;
