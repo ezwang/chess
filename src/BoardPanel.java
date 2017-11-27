@@ -14,6 +14,9 @@ public class BoardPanel extends JPanel {
     private Location selected;
     private Set<Location> allowed;
 
+    private final Color BOARD_LIGHT = Color.decode("#FED496");
+    private final Color BOARD_DARK = Color.decode("#D09137");
+
     private Map<String, Image> images = new TreeMap<String, Image>();
 
     public BoardPanel(GameState state, ClientConnection client) {
@@ -41,7 +44,21 @@ public class BoardPanel extends JPanel {
                         allowed = null;
                     }
                     else if (allowed != null && allowed.contains(mv)) {
-                        Packet movePacket = new PacketMove(selected, mv);
+                        Packet movePacket;
+                        if (state.getPiece(selected.getX(), selected.getY()) instanceof Pawn && (mv.getY() == 0 || mv.getY() == 7)) {
+                            String[] values = new String[] { "Queen", "Rook", "Bishop", "Knight" };
+                            Object result = JOptionPane.showInputDialog(null, "What should this pawn be promoted into?","Piece Promotion", JOptionPane.DEFAULT_OPTION, null, values, 0);
+                            if (result == null) {
+                                // user canceled the selection,
+                                // cancel the move
+                                return;
+                            }
+                            String res = result.toString();
+                            movePacket = new PacketMove(selected, mv, res);
+                        }
+                        else {
+                            movePacket = new PacketMove(selected, mv);
+                        }
                         try {
                             client.sendPacket(movePacket);
                         }
@@ -92,11 +109,11 @@ public class BoardPanel extends JPanel {
             for (int j = 0; j < 8; j++) {
                 boolean whiteSquare = false;
                 if ((j + i) % 2 == (state.playerIsWhite() ? 0 : 1)) {
-                    g.setColor(Color.WHITE);
+                    g.setColor(BOARD_LIGHT);
                     whiteSquare = true;
                 }
                 else {
-                    g.setColor(Color.BLACK);
+                    g.setColor(BOARD_DARK);
                 }
                 Location curr = new Location(i, state.playerIsWhite() ? 7-j : j);
                 if (curr.equals(selected)) {

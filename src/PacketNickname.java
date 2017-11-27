@@ -1,5 +1,8 @@
 import java.io.IOException;
 
+/**
+ * A packet that notifies the server about client nicknames.
+ */
 public class PacketNickname implements Packet {
     String nick;
 

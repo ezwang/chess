@@ -1,3 +1,6 @@
+/**
+ * A packet sent to clients notifying them that the game has started.
+ */
 public class PacketStart implements Packet {
     private String whiteNick, blackNick;
     private boolean isWhite;
@@ -10,7 +13,6 @@ public class PacketStart implements Packet {
 
     @Override
     public void processClient(ClientConnection c) {
-        // TODO: implement game start
         if (isWhite) {
             c.startGame(blackNick, isWhite);
         }

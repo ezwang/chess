@@ -4,7 +4,7 @@ public abstract class Piece {
     protected Location loc;
 
     protected boolean isWhite;
-    protected GameState gameState;
+    protected transient GameState gameState;
 
     public Piece(boolean isWhite, GameState state, Location loc) {
         this.isWhite = isWhite;
@@ -36,5 +36,9 @@ public abstract class Piece {
             }
         }
         return moves;
+    }
+
+    public Location getLocation() {
+        return loc;
     }
 }
