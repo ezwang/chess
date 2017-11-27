@@ -36,7 +36,7 @@ public class ServerConnection implements Runnable {
                     type = in.readUTF();
                     packet = in.readUTF();
                 }
-                catch (EOFException ex) {
+                catch (EOFException | SocketException ex) {
                     // client has disconnected
                     if (opponent != null) {
                         opponent.sendPacket(new PacketDisconnect());
