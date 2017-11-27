@@ -17,11 +17,15 @@ public class BoardPanel extends JPanel {
     private final Color BOARD_LIGHT = Color.decode("#FED496");
     private final Color BOARD_DARK = Color.decode("#D09137");
 
-    private Map<String, Image> images = new TreeMap<String, Image>();
+    private Map<String, Image> images;
 
     public BoardPanel(GameState state, ClientConnection client) {
         this.state = state;
 
+        blackInCheck = false;
+        whiteInCheck = false;
+
+        images = new TreeMap<String, Image>();
         loadImages();
 
         BoardPanel t = this;
@@ -35,6 +39,10 @@ public class BoardPanel extends JPanel {
                 int x = mouseEvent.getX() / SQUARE_SIZE;
                 int y = mouseEvent.getY() / SQUARE_SIZE;
 
+                Piece op = null;
+                if (selected != null) {
+                    op = state.getPiece(selected.getX(), selected.getY());
+                }
                 Piece p = state.getPiece(x, state.playerIsWhite() ? 7-y : y);
                 Location mv = new Location(x, state.playerIsWhite() ? 7-y : y);
 
@@ -45,7 +53,8 @@ public class BoardPanel extends JPanel {
                     }
                     else if (allowed != null && allowed.contains(mv)) {
                         Packet movePacket;
-                        if (state.getPiece(selected.getX(), selected.getY()) instanceof Pawn && (mv.getY() == 0 || mv.getY() == 7)) {
+                        // this case handles pawn promotion
+                        if (op instanceof Pawn && (mv.getY() == 0 || mv.getY() == 7)) {
                             String[] values = new String[] { "Queen", "Rook", "Bishop", "Knight" };
                             Object result = JOptionPane.showInputDialog(null, "What should this pawn be promoted into?","Piece Promotion", JOptionPane.DEFAULT_OPTION, null, values, 0);
                             if (result == null) {
@@ -116,6 +125,17 @@ public class BoardPanel extends JPanel {
                     g.setColor(BOARD_DARK);
                 }
                 Location curr = new Location(i, state.playerIsWhite() ? 7-j : j);
+                Piece p = state.getPiece(i, state.playerIsWhite() ? 7-j : j);
+                // if the king is under check, make the king's square red
+                if (p instanceof King) {
+                    if (blackInCheck && !p.getIsWhite()) {
+                        g.setColor(Color.RED);
+                    }
+                    if (whiteInCheck && p.getIsWhite()) {
+                        g.setColor(Color.RED);
+                    }
+                }
+                // if the piece is currently selected, make it green
                 if (curr.equals(selected)) {
                     if (whiteSquare) {
                         g.setColor(Color.GREEN);
@@ -133,7 +153,6 @@ public class BoardPanel extends JPanel {
                     }
                 }
                 g.fillRect(SQUARE_SIZE * i, SQUARE_SIZE * j, SQUARE_SIZE * (i + 1), SQUARE_SIZE * (j + 1));
-                Piece p = state.getPiece(i, state.playerIsWhite() ? 7-j : j);
                 if (p != null) {
                     String color = p.getIsWhite() ? "l" : "d";
                     g.drawImage(images.get(p.getNotationSymbol() + color),SQUARE_SIZE * i, SQUARE_SIZE * j, null);
@@ -145,5 +164,14 @@ public class BoardPanel extends JPanel {
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(SQUARE_SIZE * 8, SQUARE_SIZE * 8);
+    }
+
+    private boolean blackInCheck;
+    private boolean whiteInCheck;
+
+    public void update() {
+        blackInCheck = state.checkInCheck(false);
+        whiteInCheck = state.checkInCheck(true);
+        this.repaint();
     }
 }

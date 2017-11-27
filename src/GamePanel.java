@@ -34,7 +34,7 @@ public class GamePanel extends JPanel {
 
     public void update() {
         turn.setText(state.isPlayerTurn() ?"Your Turn" : "Opponent's Turn");
-        board.repaint();
+        board.update();
     }
 
     public void endGame() {

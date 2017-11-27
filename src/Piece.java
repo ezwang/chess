@@ -1,9 +1,9 @@
 import java.util.*;
 
-public abstract class Piece {
+public abstract class Piece implements Comparable<Piece> {
     protected Location loc;
 
-    protected boolean isWhite;
+    private boolean isWhite;
     protected transient GameState gameState;
 
     public Piece(boolean isWhite, GameState state, Location loc) {
@@ -40,5 +40,19 @@ public abstract class Piece {
 
     public Location getLocation() {
         return loc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || o.getClass() != this.getClass()) {
+            return false;
+        }
+        Piece p = (Piece)o;
+        return loc.equals(p.loc);
+    }
+
+    @Override
+    public int compareTo(Piece p) {
+        return loc.compareTo(p.loc);
     }
 }

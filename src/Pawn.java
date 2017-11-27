@@ -11,7 +11,7 @@ public class Pawn extends Piece {
         // TODO: implement en passant
         Set<Location> moves = new TreeSet<Location>();
         boolean isInitial = false;
-        if (isWhite) {
+        if (getIsWhite()) {
             if (loc.getY() == 1) {
                 isInitial = true;
             }
@@ -24,10 +24,10 @@ public class Pawn extends Piece {
                         moves.add(loc.translate(0, 2));
                     }
                 }
-                if (gameState.isDifferentColor(loc.getX() + 1, loc.getY() + 1, isWhite)) {
+                if (gameState.isDifferentColor(loc.getX() + 1, loc.getY() + 1, getIsWhite())) {
                     moves.add(loc.translate(1, 1));
                 }
-                if (gameState.isDifferentColor(loc.getX() - 1, loc.getY() + 1, isWhite)) {
+                if (gameState.isDifferentColor(loc.getX() - 1, loc.getY() + 1, getIsWhite())) {
                     moves.add(loc.translate(-1, 1));
                 }
             }
@@ -45,10 +45,10 @@ public class Pawn extends Piece {
                         moves.add(loc.translate(0, -2));
                     }
                 }
-                if (gameState.isDifferentColor(loc.getX() + 1, loc.getY() - 1, isWhite)) {
+                if (gameState.isDifferentColor(loc.getX() + 1, loc.getY() - 1, getIsWhite())) {
                     moves.add(loc.translate(1, -1));
                 }
-                if (gameState.isDifferentColor(loc.getX() - 1, loc.getY() - 1, isWhite)) {
+                if (gameState.isDifferentColor(loc.getX() - 1, loc.getY() - 1, getIsWhite())) {
                     moves.add(loc.translate(-1, -1));
                 }
             }

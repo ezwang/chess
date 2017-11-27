@@ -1,3 +1,6 @@
+import java.util.Set;
+import java.util.TreeSet;
+
 public class GameState {
     private Piece[][] board;
     private String player, opponent;
@@ -79,17 +82,69 @@ public class GameState {
     }
 
     public boolean isSameColor(int x, int y, boolean isWhite) {
-        return isOccupied(x, y) && board[y][x].isWhite == isWhite;
+        return isOccupied(x, y) && board[y][x].getIsWhite() == isWhite;
     }
 
     public boolean isDifferentColor(int x, int y, boolean isWhite) {
-        return isOccupied(x, y) && board[y][x].isWhite != isWhite;
+        return isOccupied(x, y) && board[y][x].getIsWhite() != isWhite;
     }
 
     public void setPiece(int x, int y, Piece p) {
         if (x >= 0 && y >= 0 && x < 8 && y < 8) {
             board[y][x] = p;
         }
+    }
+
+    private Set<Piece> getPiecesByColor(boolean isWhite) {
+        Set<Piece> pieces = new TreeSet<Piece>();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                Piece p = board[j][i];
+                if (p != null && p.getIsWhite() == isWhite) {
+                    pieces.add(p);
+                }
+            }
+        }
+        return pieces;
+    }
+
+    private King getKing(boolean isWhite) {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (board[j][i] instanceof King) {
+                    if (board[j][i].getIsWhite() == isWhite) {
+                        return (King)board[j][i];
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public boolean checkInCheck(boolean isWhite) {
+        Set<Piece> pieces = getPiecesByColor(!isWhite);
+        Location king = getKing(isWhite).getLocation();
+        for (Piece p : pieces) {
+            Set<Location> locs = p.getMovableLocations();
+            if (locs.contains(king)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkCheckmate(boolean isWhite) {
+        King king = getKing(isWhite);
+        Set<Location> routes = king.getMovableLocations();
+        routes.add(king.getLocation());
+        Set<Piece> pieces = getPiecesByColor(!isWhite);
+        for (Piece p : pieces) {
+            Set<Location> locs = p.getMovableLocations();
+            for (Location bad : locs) {
+                routes.remove(bad);
+            }
+        }
+        return routes.size() == 0;
     }
 
     public void togglePlayerTurn() {
