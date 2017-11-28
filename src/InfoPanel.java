@@ -13,6 +13,8 @@ public class InfoPanel extends JPanel {
     private GameState state;
     private ClientConnection client;
 
+    private boolean offeringDraw;
+
     private JButton drawButton, endButton, backButton;
 
     public InfoPanel(GameState state, ClientConnection c) {
@@ -45,6 +47,15 @@ public class InfoPanel extends JPanel {
 
         JPanel controls = new JPanel();
         drawButton = new JButton("Offer Draw");
+        drawButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Packet p = new PacketDraw();
+                c.sendPacket(p);
+                offeringDraw = !offeringDraw;
+                drawButton.setText(offeringDraw ? "Cancel Offer" : "Offer Draw");
+            }
+        });
         controls.add(drawButton);
 
         endButton = new JButton("Resign");

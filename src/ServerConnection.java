@@ -17,6 +17,8 @@ public class ServerConnection implements Runnable {
     private String nickname;
     private Gson gson;
 
+    private boolean draw;
+
     public ServerConnection(Server server, Socket sock) throws IOException {
         this.server = server;
         this.socket = sock;
@@ -94,5 +96,13 @@ public class ServerConnection implements Runnable {
         }
         ServerConnection c = (ServerConnection)o;
         return c.socket == socket;
+    }
+
+    public boolean getDraw() {
+        return draw;
+    }
+
+    public void setDraw(boolean draw) {
+        this.draw = draw;
     }
 }
