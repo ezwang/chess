@@ -133,4 +133,8 @@ public class ClientConnection implements Runnable {
     public void endGame() {
         gui.endGame();
     }
+
+    public GamePanel getGUI() {
+        return gui;
+    }
 }

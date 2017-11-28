@@ -1,11 +1,13 @@
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.awt.*;
 
 public class GamePanel extends JPanel {
     private BoardPanel board;
-    private JLabel turn;
+    private InfoPanel info;
     private GameState state;
     private ClientConnection client;
 
@@ -14,34 +16,23 @@ public class GamePanel extends JPanel {
         this.state = state;
         this.client = c;
 
-        JPanel info = new JPanel();
-        info.setLayout(new BorderLayout());
-        info.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-        JLabel names = new JLabel(state.getPlayerNickname() + " vs. " + state.getOpponentNickname(), SwingConstants.CENTER);
-        names.setForeground(Color.GRAY);
-        info.add(names, BorderLayout.NORTH);
-
-        turn = new JLabel(state.isPlayerTurn() ?"Your Turn" : "Opponent's Turn", SwingConstants.CENTER);
-        turn.setForeground(state.isPlayerTurn() ? Color.BLACK : Color.GRAY);
-        turn.setFont(new Font("Lucidia", Font.BOLD, 20));
-        turn.setForeground(Color.BLACK);
-        info.add(turn, BorderLayout.CENTER);
-
+        info = new InfoPanel(state, c);
         this.add(info, BorderLayout.WEST);
 
         board = new BoardPanel(state, c);
         this.add(board, BorderLayout.CENTER);
     }
 
+    public void addMove(Location loc) {
+        info.addMove(loc);
+    }
+
     public void update() {
-        turn.setText(state.isPlayerTurn() ? "Your Turn" : "Opponent's Turn");
-        turn.setForeground(state.isPlayerTurn() ? Color.BLACK : Color.GRAY);
+        info.update();
         board.update();
     }
 
     public void endGame() {
-        turn.setText("Game Ended");
-        turn.setForeground(Color.BLUE);
+        info.endGame();
     }
 }

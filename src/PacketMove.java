@@ -57,6 +57,7 @@ public class PacketMove implements Packet {
             }
             state.setPiece(now.getX(), now.getY(), np);
         }
+        c.getGUI().addMove(now);
         c.update();
     }
 
