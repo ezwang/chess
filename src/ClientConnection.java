@@ -33,10 +33,18 @@ public class ClientConnection implements Runnable {
      * @param p The packet to send to the server.
      * @throws IOException
      */
-    public void sendPacket(Packet p) throws IOException {
-        out.writeUTF(p.getClass().getName());
-        out.writeUTF(gson.toJson(p));
-        out.flush();
+    public void sendPacket(Packet p) {
+        if (socket.isConnected()) {
+            try {
+                out.writeUTF(p.getClass().getName());
+                out.writeUTF(gson.toJson(p));
+                out.flush();
+            }
+            catch (IOException ex) {
+                // TODO: handle exception
+                ex.printStackTrace();
+            }
+        }
     }
 
     public GameState getGameState() {
@@ -58,14 +66,8 @@ public class ClientConnection implements Runnable {
      * Send player nickname to the server.
      */
     public void sendNickname() {
-        try {
-            Packet p = new PacketNickname(nick);
-            sendPacket(p);
-        }
-        catch (IOException ex) {
-            // TODO: handle this
-            ex.printStackTrace();
-        }
+        Packet p = new PacketNickname(nick);
+        sendPacket(p);
     }
 
     public void run() {
@@ -85,8 +87,13 @@ public class ClientConnection implements Runnable {
             }
         }
         catch (IOException ex) {
-            // TODO: handle exception
-            ex.printStackTrace();
+            // if the socket is closed,
+            // ignore the error that comes
+            // from reading a closed socket
+            if (!socket.isConnected()) {
+                // TODO: handle exception
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -130,17 +137,21 @@ public class ClientConnection implements Runnable {
         gui.update();
     }
 
-    public void endGame() {
+    public void endGame(String message) {
         try {
             socket.close();
         }
         catch (IOException ex) {
             // ignore if socket fails to close
         }
-        gui.endGame();
+        gui.endGame(message);
     }
 
     public GamePanel getGUI() {
         return gui;
+    }
+
+    public void goBackToIntro() {
+        game.setContent(new IntroPanel(game));
     }
 }

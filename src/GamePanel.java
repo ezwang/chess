@@ -32,7 +32,7 @@ public class GamePanel extends JPanel {
         board.update();
     }
 
-    public void endGame() {
-        info.endGame();
+    public void endGame(String message) {
+        info.endGame(message);
     }
 }

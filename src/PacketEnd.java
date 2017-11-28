@@ -9,7 +9,7 @@ public class PacketEnd implements Packet {
 
     @Override
     public void processClient(ClientConnection c) {
-        c.endGame();
+        c.endGame((winner ? "White" : "Black") + " Wins!");
     }
 
     @Override

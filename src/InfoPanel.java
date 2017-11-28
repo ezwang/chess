@@ -2,6 +2,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class InfoPanel extends JPanel {
     private JLabel turn;
@@ -11,18 +13,22 @@ public class InfoPanel extends JPanel {
     private GameState state;
     private ClientConnection client;
 
+    private JButton drawButton, endButton, backButton;
+
     public InfoPanel(GameState state, ClientConnection c) {
         this.state = state;
         this.client = c;
 
-        this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-        JLabel names = new JLabel(state.getPlayerNickname() + " vs. " + state.getOpponentNickname(), SwingConstants.CENTER);
+        JLabel names = new JLabel(state.getPlayerNickname() + " vs. " + state.getOpponentNickname());
         names.setForeground(Color.GRAY);
+        names.setAlignmentX(Component.CENTER_ALIGNMENT);
         this.add(names);
 
-        turn = new JLabel(state.isPlayerTurn() ?"Your Turn" : "Opponent's Turn", SwingConstants.CENTER);
+        turn = new JLabel(state.isPlayerTurn() ?"Your Turn" : "Opponent's Turn");
+        turn.setAlignmentX(Component.CENTER_ALIGNMENT);
         turn.setForeground(state.isPlayerTurn() ? Color.BLACK : Color.GRAY);
         turn.setFont(new Font("Lucidia", Font.BOLD, 20));
         turn.setForeground(Color.BLACK);
@@ -36,6 +42,31 @@ public class InfoPanel extends JPanel {
         moves.addColumn("White");
         moves.addColumn("Black");
         this.add(movesContainer);
+
+        JPanel controls = new JPanel();
+        drawButton = new JButton("Offer Draw");
+        controls.add(drawButton);
+
+        endButton = new JButton("Resign");
+        endButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Packet p = new PacketEnd(!state.playerIsWhite());
+                c.sendPacket(p);
+            }
+        });
+        controls.add(endButton);
+
+        backButton = new JButton("Play Again");
+        backButton.setVisible(false);
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                client.goBackToIntro();
+            }
+        });
+        controls.add(backButton);
+        this.add(controls);
     }
 
     /**
@@ -67,9 +98,12 @@ public class InfoPanel extends JPanel {
         turn.setForeground(state.isPlayerTurn() ? Color.BLACK : Color.GRAY);
     }
 
-    public void endGame() {
-        turn.setText("Game Ended");
+    public void endGame(String message) {
+        turn.setText(message);
         turn.setForeground(Color.BLUE);
+        drawButton.setVisible(false);
+        endButton.setVisible(false);
+        backButton.setVisible(true);
     }
 
     @Override

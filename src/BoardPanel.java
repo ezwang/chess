@@ -74,12 +74,7 @@ public class BoardPanel extends JPanel {
                         else {
                             movePacket = new PacketMove(selected, mv);
                         }
-                        try {
-                            client.sendPacket(movePacket);
-                        }
-                        catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        client.sendPacket(movePacket);
                         selected = null;
                         allowed = null;
                     }
