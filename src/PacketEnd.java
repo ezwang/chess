@@ -24,7 +24,9 @@ public class PacketEnd implements Packet {
 
     @Override
     public void processServer(ServerConnection c) throws IOException {
-        c.sendPacket(this);
+        c.endGame();
+        c.getOpponent().endGame();
         c.getOpponent().sendPacket(this);
+        c.sendPacket(this);
     }
 }

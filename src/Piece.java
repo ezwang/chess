@@ -12,7 +12,25 @@ public abstract class Piece implements Comparable<Piece> {
         this.loc = loc;
     }
 
+    /**
+     * Get all the locations this piece can move to.
+     * @return A set of locations where this piece can move.
+     */
     public abstract Set<Location> getMovableLocations();
+
+    /**
+     * Get all of the locations between this piece and the target piece.
+     * Returns an empty set if the piece is not reachable, or if the piece
+     * is not blockable. This method is used for check/checkmate checks.
+     * @param dest The target piece.
+     * @return The locations between this piece and target.
+     */
+    public abstract Set<Location> getPathToPiece(Location dest);
+
+    /**
+     * Get the character symbol for this piece.
+     * @return The character symbol for this piece.
+     */
     public abstract String getNotationSymbol();
 
     public boolean getIsWhite() {
@@ -40,6 +58,32 @@ public abstract class Piece implements Comparable<Piece> {
 
     public Location getLocation() {
         return loc;
+    }
+
+    protected Set<Location> tryDirectionsPathToPiece(Location[] loc, Location dest) {
+        for (Location l : loc) {
+            if (isDirectionCorrect(l, dest)) {
+                TreeSet<Location> out = new TreeSet<Location>();
+                Location curr = this.loc.translate(l.getX(), l.getY());
+                while (!curr.equals(dest)) {
+                    out.add(curr);
+                    curr = curr.translate(l.getX(), l.getY());
+                }
+                return out;
+            }
+        }
+        return new TreeSet<Location>();
+    }
+
+    private boolean isDirectionCorrect(Location dir, Location dest) {
+        Location curr = this.loc;
+        while (gameState.onBoard(curr.getX(), curr.getY())) {
+            if (dest.equals(curr)) {
+                return true;
+            }
+            curr = curr.translate(dir.getX(), dir.getY());
+        }
+        return false;
     }
 
     @Override

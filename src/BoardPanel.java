@@ -58,6 +58,14 @@ public class BoardPanel extends JPanel {
                         allowed = null;
                     }
                     else if (allowed != null && allowed.contains(mv)) {
+                        if (playerInCheck) {
+                            Move m = new Move(selected, mv);
+                            if (!movesUnderCheck.contains(m)) {
+                                client.addChat("You cannot make that move because you are in check!");
+                                client.addChat("Valid Moves: " + movesUnderCheck.toString());
+                                return;
+                            }
+                        }
                         Packet movePacket;
                         // this case handles pawn promotion
                         if (op instanceof Pawn && (mv.getY() == 0 || mv.getY() == 7)) {
@@ -153,11 +161,13 @@ public class BoardPanel extends JPanel {
                     }
                 }
                 else if (allowed != null && allowed.contains(curr)) {
-                    if (whiteSquare) {
-                        g.setColor(Color.BLUE);
-                    }
-                    else {
-                        g.setColor(Color.BLUE.darker().darker());
+                    Move m = new Move(selected, curr);
+                    if (!playerInCheck || movesUnderCheck.contains(m)) {
+                        if (whiteSquare) {
+                            g.setColor(Color.BLUE);
+                        } else {
+                            g.setColor(Color.BLUE.darker().darker());
+                        }
                     }
                 }
                 g.fillRect(SQUARE_SIZE * i, SQUARE_SIZE * j, SQUARE_SIZE, SQUARE_SIZE);
@@ -181,10 +191,27 @@ public class BoardPanel extends JPanel {
 
     private boolean blackInCheck;
     private boolean whiteInCheck;
+    private boolean playerInCheck;
+
+    private Set<Move> movesUnderCheck;
 
     public void update() {
         blackInCheck = state.checkInCheck(false);
         whiteInCheck = state.checkInCheck(true);
+        playerInCheck = state.playerIsWhite() ? whiteInCheck : blackInCheck;
+        if (state.playerIsWhite() && whiteInCheck) {
+            movesUnderCheck = state.getPossibleMovesUnderCheck(true);
+        }
+        else if (!state.playerIsWhite() && blackInCheck) {
+            movesUnderCheck = state.getPossibleMovesUnderCheck(false);
+        }
+        else {
+            movesUnderCheck = null;
+        }
+        if (playerInCheck && movesUnderCheck.size() == 0) {
+            Packet lose = new PacketEnd(!state.playerIsWhite());
+            client.sendPacket(lose);
+        }
         this.repaint();
     }
 }

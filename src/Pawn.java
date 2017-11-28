@@ -20,7 +20,7 @@ public class Pawn extends Piece {
                     moves.add(loc.translate(0, 1));
                 }
                 if (isInitial) {
-                    if (!gameState.isOccupied(loc.getX(), loc.getY() + 1)) {
+                    if (!gameState.isOccupied(loc.getX(), loc.getY() + 2)) {
                         moves.add(loc.translate(0, 2));
                     }
                 }
@@ -41,7 +41,7 @@ public class Pawn extends Piece {
                     moves.add(loc.translate(0, -1));
                 }
                 if (isInitial) {
-                    if (!gameState.isOccupied(loc.getX(), loc.getY() - 1)) {
+                    if (!gameState.isOccupied(loc.getX(), loc.getY() - 2)) {
                         moves.add(loc.translate(0, -2));
                     }
                 }
@@ -54,6 +54,11 @@ public class Pawn extends Piece {
             }
         }
         return moves;
+    }
+
+    @Override
+    public Set<Location> getPathToPiece(Location dest) {
+        return new TreeSet<Location>();
     }
 
     @Override

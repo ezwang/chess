@@ -25,6 +25,11 @@ public class King extends Piece {
     }
 
     @Override
+    public Set<Location> getPathToPiece(Location dest) {
+        return new TreeSet<Location>();
+    }
+
+    @Override
     public String getNotationSymbol() {
         return "k";
     }

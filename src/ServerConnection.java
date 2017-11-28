@@ -18,6 +18,7 @@ public class ServerConnection implements Runnable {
     private Gson gson;
 
     private boolean draw;
+    private boolean gameEnded;
 
     public ServerConnection(Server server, Socket sock) throws IOException {
         this.server = server;
@@ -40,7 +41,7 @@ public class ServerConnection implements Runnable {
                 }
                 catch (EOFException | SocketException ex) {
                     // client has disconnected
-                    if (opponent != null) {
+                    if (opponent != null && !gameEnded) {
                         opponent.sendPacket(new PacketDisconnect());
                     }
                     else {
@@ -104,5 +105,9 @@ public class ServerConnection implements Runnable {
 
     public void setDraw(boolean draw) {
         this.draw = draw;
+    }
+
+    public void endGame() {
+        gameEnded = true;
     }
 }

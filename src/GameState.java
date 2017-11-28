@@ -133,19 +133,44 @@ public class GameState {
         return false;
     }
 
-    public boolean checkCheckmate(boolean isWhite) {
-        // TODO: check if piece can block/piece can get captured
+    public Set<Move> getPossibleMovesUnderCheck(boolean isWhite) {
+        Set<Move> out = new TreeSet<Move>();
         King king = getKing(isWhite);
         Set<Location> routes = king.getMovableLocations();
-        routes.add(king.getLocation());
-        Set<Piece> pieces = getPiecesByColor(!isWhite);
-        for (Piece p : pieces) {
+        Location curr = king.getLocation();
+        Set<Piece> opponentPieces = getPiecesByColor(!isWhite);
+        Set<Piece> friendlyPieces = getPiecesByColor(isWhite);
+        friendlyPieces.remove(king);
+        Set<Piece> mustCapture = new TreeSet<Piece>();
+        for (Piece p : opponentPieces) {
             Set<Location> locs = p.getMovableLocations();
             for (Location bad : locs) {
                 routes.remove(bad);
+                if (bad.equals(curr)) {
+                    mustCapture.add(p);
+                }
             }
         }
-        return routes.size() == 0;
+        // case where you can run away
+        for (Location route : routes) {
+            out.add(new Move(curr, route));
+        }
+        // case where you can capture opponent
+        // case where you can block opponent
+        if (mustCapture.size() == 1) {
+            Piece attackPiece = mustCapture.iterator().next();
+            Set<Location> blocks = attackPiece.getPathToPiece(curr);
+            Location gl = attackPiece.getLocation();
+            for (Piece fp : friendlyPieces) {
+                Set<Location> locs = fp.getMovableLocations();
+                for (Location good : locs) {
+                    if (gl.equals(good) || blocks.contains(good)) {
+                        out.add(new Move(fp.getLocation(), good));
+                    }
+                }
+            }
+        }
+        return out;
     }
 
     public void togglePlayerTurn() {
