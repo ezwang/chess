@@ -158,4 +158,8 @@ public class ClientConnection implements Runnable {
     public void addChat(String message) {
         gui.addChat(message);
     }
+
+    public String getNickname() {
+        return nick;
+    }
 }

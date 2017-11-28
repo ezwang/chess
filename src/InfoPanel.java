@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +17,8 @@ public class InfoPanel extends JPanel {
     private boolean offeringDraw;
 
     private JButton drawButton, endButton, backButton;
+    private JTextArea chatOutput;
+    private JTextField chatInput;
 
     public InfoPanel(GameState state, ClientConnection c) {
         this.state = state;
@@ -44,6 +47,25 @@ public class InfoPanel extends JPanel {
         moves.addColumn("White");
         moves.addColumn("Black");
         this.add(movesContainer);
+
+        chatOutput = new JTextArea();
+        chatOutput.setEnabled(false);
+        chatOutput.setDisabledTextColor(Color.BLACK);
+        chatOutput.setRows(6);
+        DefaultCaret caret = (DefaultCaret) chatOutput.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+        this.add(new JScrollPane(chatOutput));
+
+        chatInput = new JTextField();
+        chatInput.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Packet p = new PacketChat("<" + client.getNickname() + "> " + chatInput.getText());
+                c.sendPacket(p);
+                chatInput.setText("");
+            }
+        });
+        this.add(chatInput);
 
         JPanel controls = new JPanel();
         drawButton = new JButton("Offer Draw");
@@ -120,5 +142,9 @@ public class InfoPanel extends JPanel {
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(300, super.getPreferredSize().height);
+    }
+
+    public void addChat(String message) {
+        chatOutput.append(message + "\n");
     }
 }

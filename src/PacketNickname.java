@@ -34,5 +34,12 @@ public class PacketNickname implements Packet {
 
         c.sendPacket(p);
         match.sendPacket(p2);
+
+        Packet intro = new PacketChat("Welcome to multiplayer chess!\n" +
+                                      "Use the textbox below to chat.\n" +
+                                      "Press enter to send your message.");
+
+        c.sendPacket(intro);
+        match.sendPacket(intro);
     }
 }

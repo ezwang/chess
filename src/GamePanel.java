@@ -37,6 +37,6 @@ public class GamePanel extends JPanel {
     }
 
     public void addChat(String message) {
-        // TODO: implement chat
+        info.addChat(message);
     }
 }

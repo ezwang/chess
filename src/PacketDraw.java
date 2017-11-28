@@ -16,6 +16,9 @@ public class PacketDraw implements Packet {
         }
         else {
             c.setDraw(!c.getDraw());
+
+            Packet notify = new PacketChat(c.getNickname() + " has " + (c.getDraw() ? "offered" : "rescinded") + " a draw!");
+            c.getOpponent().sendPacket(notify);
         }
     }
 }
