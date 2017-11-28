@@ -134,6 +134,7 @@ public class GameState {
     }
 
     public boolean checkCheckmate(boolean isWhite) {
+        // TODO: check if piece can block/piece can get captured
         King king = getKing(isWhite);
         Set<Location> routes = king.getMovableLocations();
         routes.add(king.getLocation());

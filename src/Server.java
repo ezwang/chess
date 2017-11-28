@@ -39,7 +39,7 @@ public class Server implements Runnable {
                     // server has been stopped
                     return;
                 }
-                // TODO
+                // TODO: handle exception
                 e.printStackTrace();
             }
         }

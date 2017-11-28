@@ -79,13 +79,13 @@ public class ClientConnection implements Runnable {
                     p.processClient(this);
                 }
                 catch (ClassNotFoundException ex) {
-                    // TODO; handle this
+                    // TODO: handle this
                     ex.printStackTrace();
                 }
             }
         }
         catch (IOException ex) {
-            // TODO
+            // TODO: handle exception
             ex.printStackTrace();
         }
     }
