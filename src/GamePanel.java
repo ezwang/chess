@@ -35,4 +35,8 @@ public class GamePanel extends JPanel {
     public void endGame(String message) {
         info.endGame(message);
     }
+
+    public void addChat(String message) {
+        // TODO: implement chat
+    }
 }

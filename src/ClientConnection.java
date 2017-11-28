@@ -154,4 +154,8 @@ public class ClientConnection implements Runnable {
     public void goBackToIntro() {
         game.setContent(new IntroPanel(game));
     }
+
+    public void addChat(String message) {
+        gui.addChat(message);
+    }
 }
