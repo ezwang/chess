@@ -38,7 +38,7 @@ public class BoardPanel extends JPanel {
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
-                if (!state.isPlayerTurn()) {
+                if (!state.isPlayerTurn() || !client.isConnected()) {
                     return;
                 }
 

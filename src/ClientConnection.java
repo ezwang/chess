@@ -47,6 +47,10 @@ public class ClientConnection implements Runnable {
         }
     }
 
+    public boolean isConnected() {
+        return socket != null && socket.isConnected();
+    }
+
     public GameState getGameState() {
         return state;
     }
