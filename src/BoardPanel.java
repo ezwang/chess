@@ -42,8 +42,8 @@ public class BoardPanel extends JPanel {
                     return;
                 }
 
-                int x = mouseEvent.getX() / SQUARE_SIZE;
-                int y = mouseEvent.getY() / SQUARE_SIZE;
+                int x = (mouseEvent.getX() - BORDER_WIDTH) / SQUARE_SIZE;
+                int y = (mouseEvent.getY() - BORDER_WIDTH) / SQUARE_SIZE;
 
                 Piece op = null;
                 if (selected != null) {
@@ -177,6 +177,11 @@ public class BoardPanel extends JPanel {
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(SQUARE_SIZE * 8 + BORDER_WIDTH * 2, SQUARE_SIZE * 8 + BORDER_WIDTH * 2);
+    }
+
+    @Override
+    public Dimension getMinimumSize() {
+        return getPreferredSize();
     }
 
     private boolean blackInCheck;

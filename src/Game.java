@@ -8,8 +8,10 @@ public class Game implements Runnable {
     public void run() {
         frame = new JFrame("Multiplayer Chess");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
         frame.setContentPane(new IntroPanel(this));
         frame.pack();
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 

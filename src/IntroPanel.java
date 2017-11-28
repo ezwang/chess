@@ -113,6 +113,13 @@ public class IntroPanel extends JPanel {
         controls.add(serverStatusLabel, BorderLayout.SOUTH);
 
         this.add(controls, BorderLayout.SOUTH);
+
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                startGameButton.requestFocusInWindow();
+            }
+        });
     }
 
     /**
@@ -125,6 +132,10 @@ public class IntroPanel extends JPanel {
         return verbs[(int)(Math.random() * verbs.length)] + nouns[(int)(Math.random() * nouns.length)];
     }
 
+    /**
+     * Enable or disable all of the controls in the intro panel.
+     * @param enabled Whether the controls are enabled or disabled.
+     */
     private void toggleControls(boolean enabled) {
         serverButton.setEnabled(enabled);
         startGameButton.setEnabled(enabled);
