@@ -10,6 +10,10 @@ public class PacketDraw implements Packet {
     public void processServer(ServerConnection c) throws IOException {
         boolean opponentDraw = c.getOpponent().getDraw();
         if (opponentDraw) {
+            Packet notify = new PacketChat("Draw accepted!");
+            c.sendPacket(notify);
+            c.getOpponent().sendPacket(notify);
+
             Packet p = new PacketEnd("Tie!");
             c.sendPacket(p);
             c.getOpponent().sendPacket(p);
