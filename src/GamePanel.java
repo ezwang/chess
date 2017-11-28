@@ -23,7 +23,8 @@ public class GamePanel extends JPanel {
         info.add(names, BorderLayout.NORTH);
 
         turn = new JLabel(state.isPlayerTurn() ?"Your Turn" : "Opponent's Turn", SwingConstants.CENTER);
-        turn.setFont(new Font("Lucidia", Font.BOLD, 24));
+        turn.setForeground(state.isPlayerTurn() ? Color.BLACK : Color.GRAY);
+        turn.setFont(new Font("Lucidia", Font.BOLD, 20));
         turn.setForeground(Color.BLACK);
         info.add(turn, BorderLayout.CENTER);
 
@@ -34,11 +35,13 @@ public class GamePanel extends JPanel {
     }
 
     public void update() {
-        turn.setText(state.isPlayerTurn() ?"Your Turn" : "Opponent's Turn");
+        turn.setText(state.isPlayerTurn() ? "Your Turn" : "Opponent's Turn");
+        turn.setForeground(state.isPlayerTurn() ? Color.BLACK : Color.GRAY);
         board.update();
     }
 
     public void endGame() {
         turn.setText("Game Ended");
+        turn.setForeground(Color.BLUE);
     }
 }
