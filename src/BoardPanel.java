@@ -3,7 +3,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -128,7 +127,9 @@ public class BoardPanel extends JPanel {
         g.setColor(Color.GRAY.brighter());
         for (int i = 0; i < 8; i++) {
             g.drawString(""+(state.playerIsWhite() ? 8-i : i + 1), -18, i*SQUARE_SIZE + SQUARE_SIZE/2 + 9);
+            g.drawString(""+(state.playerIsWhite() ? 8-i : i + 1), SQUARE_SIZE*8 + 6, i*SQUARE_SIZE + SQUARE_SIZE/2 + 9);
             g.drawString(Character.toString((char)(i + 65)), i*SQUARE_SIZE + SQUARE_SIZE/2 - 9, -6);
+            g.drawString(Character.toString((char)(i + 65)), i*SQUARE_SIZE + SQUARE_SIZE/2 - 9, SQUARE_SIZE*8 + 18);
         }
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
