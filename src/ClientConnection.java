@@ -78,7 +78,7 @@ public class ClientConnection implements Runnable {
                     Packet p = (Packet)gson.fromJson(packet, Class.forName(type));
                     p.processClient(this);
                 }
-                catch (ClassNotFoundException ex) {
+                catch (ClassNotFoundException | ClassCastException ex) {
                     // TODO: handle this
                     ex.printStackTrace();
                 }
@@ -131,6 +131,12 @@ public class ClientConnection implements Runnable {
     }
 
     public void endGame() {
+        try {
+            socket.close();
+        }
+        catch (IOException ex) {
+            // ignore if socket fails to close
+        }
         gui.endGame();
     }
 
