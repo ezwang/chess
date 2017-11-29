@@ -13,6 +13,11 @@ public class Server implements Runnable {
 
     List<ServerConnection> queue;
 
+    /**
+     * The port that the server should listen on.
+     */
+    public static final int PORT = 1337;
+
     public Server() {
          queue = new LinkedList<ServerConnection>();
     }
@@ -93,7 +98,7 @@ public class Server implements Runnable {
      * @throws IOException
      */
     public void start() throws IOException {
-        server = new ServerSocket(1337);
+        server = new ServerSocket(Server.PORT);
         thread = new Thread(this);
         thread.start();
     }

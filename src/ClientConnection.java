@@ -92,15 +92,13 @@ public class ClientConnection implements Runnable {
                     p.processClient(this);
                 }
                 catch (ClassNotFoundException | ClassCastException ex) {
-                    // TODO: handle this
+                    // this should never happen
                     ex.printStackTrace();
                 }
             }
         }
         catch (IOException ex) {
-            // if the socket is closed,
-            // ignore the error that comes
-            // from reading a closed socket
+            // ignore the error that comes from reading a closed socket
             if (!socket.isConnected()) {
                 // TODO: handle exception
                 ex.printStackTrace();
@@ -128,7 +126,7 @@ public class ClientConnection implements Runnable {
      */
     public boolean connect() {
         try {
-            socket = new Socket(this.addr, 1337);
+            socket = new Socket(this.addr, Server.PORT);
             out = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
             thread = new Thread(this);
             thread.start();

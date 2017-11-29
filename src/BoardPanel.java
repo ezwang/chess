@@ -52,6 +52,7 @@ public class BoardPanel extends JPanel {
                 Location mv = new Location(x, state.playerIsWhite() ? 7-y : y);
 
                 if (selected != null) {
+                    // deselect pieces if they are clicked when selected
                     if (selected.equals(mv)) {
                         selected = null;
                         allowed = null;
@@ -82,8 +83,7 @@ public class BoardPanel extends JPanel {
                             String[] values = new String[] { "Queen", "Rook", "Bishop", "Knight" };
                             Object result = JOptionPane.showInputDialog(null, "What should this pawn be promoted into?","Piece Promotion", JOptionPane.DEFAULT_OPTION, null, values, 0);
                             if (result == null) {
-                                // user canceled the selection,
-                                // cancel the move
+                                // user canceled the selection, cancel the move
                                 return;
                             }
                             String res = result.toString();
@@ -136,12 +136,14 @@ public class BoardPanel extends JPanel {
         g.translate(BORDER_WIDTH, BORDER_WIDTH);
         g.setFont(BOARD_FONT);
         g.setColor(Color.GRAY.brighter());
+        // draw the numbers/letters on the side of the board
         for (int i = 0; i < 8; i++) {
             g.drawString(""+(state.playerIsWhite() ? 8-i : i + 1), -18, i*SQUARE_SIZE + SQUARE_SIZE/2 + 9);
             g.drawString(""+(state.playerIsWhite() ? 8-i : i + 1), SQUARE_SIZE*8 + 6, i*SQUARE_SIZE + SQUARE_SIZE/2 + 9);
             g.drawString(Character.toString((char)(i + 65)), i*SQUARE_SIZE + SQUARE_SIZE/2 - 9, -6);
             g.drawString(Character.toString((char)(i + 65)), i*SQUARE_SIZE + SQUARE_SIZE/2 - 9, SQUARE_SIZE*8 + 18);
         }
+        // draw the board
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 boolean whiteSquare = false;
