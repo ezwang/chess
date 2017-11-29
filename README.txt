@@ -11,13 +11,19 @@ PennKey: ezwang
   is an approprate use of the concept. Incorporate the feedback you got after
   submitting your proposal.
 
-  1.
+  1. 2-D Arrays
+        Used to represent the chessboard. Chess moves are reflected as index
+        changes in the array.
 
-  2.
+  2. Collections
+        Used in various places, such as to indicate a collection of moves (TreeSet)
+        or to keep track of the history of the game (LinkedList).
 
-  3.
+  3. Inheritance/Subtyping Dynamic Dispatch
+        Used for Packets and Pieces.
 
-  4.
+  4. Networking I/O
+        Used for the multiplayer aspect of the game.
 
 
 =========================
@@ -27,7 +33,35 @@ PennKey: ezwang
 - Provide an overview of each of the classes in your code, and what their
   function is in the overall game.
 
-    
+    Networking
+        Server: Creates ServerConnections when a new player joins.
+        ServerConnection: Handles the networking on the server side.
+        ClientConnection: Handles the networking on the client side.
+        Packet: Used to transmit information over the network.
+            PacketDisconnect
+            PacketDraw
+            PacketEnd
+            PacketMove
+            PacketNickname
+            PacketStart
+            PacketUndo
+    GUI
+        IntroPanel: The screen containing the instructions and play buttons.
+        GamePanel: A wrapper for the information and board.
+        InfoPanel: A panel containing information about the game.
+        BoardPanel: The chess board and pieces.
+    Game
+        GameState: A data structure containing all the information in a chess game.
+        Location: Represents a location on the board.
+        Move: Represents a piece move.
+        Pieces: Represent pieces on the chessboard.
+            King
+            Queen
+            Bishop
+            Knight
+            Rook
+            Pawn
+
 
 - Were there any significant stumbling blocks while you were implementing your
   game (related to your design, or otherwise)?
