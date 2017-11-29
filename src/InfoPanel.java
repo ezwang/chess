@@ -121,17 +121,17 @@ public class InfoPanel extends JPanel {
 
     /**
      * Add a move to the table of moves.
-     * @param loc The new location of the moved piece.
+     * @param move The new location of the moved piece.
      */
-    public void addMove(Location loc) {
+    public void addMove(Move move) {
         int lastRow = moves.getRowCount() - 1;
         if (lastRow >= 0 && moves.getValueAt(lastRow,1).equals("")) {
             Object first = moves.getValueAt(lastRow, 0);
             moves.removeRow(lastRow);
-            moves.addRow(new Object[] { first, loc.toString() });
+            moves.addRow(new Object[] { first, move.toString() });
         }
         else {
-            moves.addRow(new Object[]{loc.toString(), ""});
+            moves.addRow(new Object[]{move.toString(), ""});
         }
         // scroll to the bottom of the moves table
         SwingUtilities.invokeLater(new Runnable() {

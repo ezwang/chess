@@ -141,6 +141,11 @@ public class GameState {
         return pieces;
     }
 
+    /**
+     * Get the King from the chessboard.
+     * @param isWhite Which player's king to get.
+     * @return The King.
+     */
     private King getKing(boolean isWhite) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -152,6 +157,25 @@ public class GameState {
             }
         }
         return null;
+    }
+
+    /**
+     * Get the rooks from the chessboard.
+     * @param isWhite Which player's king to get.
+     * @return A set of rooks.
+     */
+    public List<Rook> getRooks(boolean isWhite) {
+        List<Rook> rooks = new LinkedList<Rook>();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (board[j][i] instanceof Rook) {
+                    if (board[j][i].getIsWhite() == isWhite) {
+                        rooks.add((Rook)board[j][i]);
+                    }
+                }
+            }
+        }
+        return rooks;
     }
 
     /**
@@ -223,42 +247,59 @@ public class GameState {
 
     /**
      * Move a piece.
-     * @param old The old location of the piece.
-     * @param now The new location of the piece.
+     * @param from The old location of the piece.
+     * @param to The new location of the piece.
      * @param transform If this is a pawn promotion, the piece to promote
      *                  the pawn into (Queen, Rook, Bishop, Knight). Null
      *                  otherwise.
      */
-    public void move(Location old, Location now, String transform) {
-        Piece p = this.getPiece(old);
-        Piece orig = this.getPiece(now);
-        this.setPiece(old, null);
+    public void move(Location from, Location to, String transform) {
+        Piece p = this.getPiece(from);
+        Piece orig = this.getPiece(to);
+        this.setPiece(from, null);
         if (transform == null) {
             // en passant
-            if (p instanceof Pawn && orig == null && old.getX() != now.getX()) {
-                orig = this.getPiece(now.getX(), old.getY());
-                this.setPiece(now.getX(), old.getY(), null);
+            if (p instanceof Pawn && orig == null && from.getX() != to.getX()) {
+                orig = this.getPiece(to.getX(), from.getY());
+                this.setPiece(to.getX(), from.getY(), null);
             }
-            this.setPiece(now, p);
-            p.setLocation(now);
+            // castling
+            if (p instanceof King && Math.abs(from.getX() - to.getX()) == 2) {
+                // right side rook
+                if (from.getX() < to.getX()) {
+                    Piece rook = this.getPiece(7, to.getY());
+                    this.setPiece(7, to.getY(), null);
+                    this.setPiece(to.getX() - 1, to.getY(), rook);
+                }
+                else {
+                    Piece rook = this.getPiece(0, to.getY());
+                    this.setPiece(0, to.getY(), null);
+                    this.setPiece(to.getX() + 1, to.getY(), rook);
+                }
+            }
+            this.setPiece(to, p);
+            p.setLocation(to);
         }
         else {
             switch (transform) {
                 case "Rook":
-                    p = new Rook(p.getIsWhite(), this, now);
+                    p = new Rook(p.getIsWhite(), this, to);
                     break;
                 case "Bishop":
-                    p = new Bishop(p.getIsWhite(), this, now);
+                    p = new Bishop(p.getIsWhite(), this, to);
                     break;
                 case "Knight":
-                    p = new Knight(p.getIsWhite(), this, now);
+                    p = new Knight(p.getIsWhite(), this, to);
                     break;
                 default:
-                    p = new Queen(p.getIsWhite(), this, now);
+                    p = new Queen(p.getIsWhite(), this, to);
             }
-            this.setPiece(now, p);
+            this.setPiece(to, p);
         }
-        history.add(new Move(old, now, orig, p));
+        if (p instanceof PieceFirstMove) {
+            ((PieceFirstMove)p).move();
+        }
+        history.add(new Move(from, to, orig, p));
         this.togglePlayerTurn();
     }
 
@@ -281,8 +322,25 @@ public class GameState {
             this.setPiece(to, null);
             this.setPiece(op.getLocation(), op);
         }
+        // castling
+        else if (p instanceof King && Math.abs(from.getX() - to.getX()) == 2) {
+            if (from.getX() < to.getX()) {
+                Piece rook = this.getPiece(to.getX() - 1, to.getY());
+                this.setPiece(7, to.getY(), rook);
+                this.setPiece(to.getX() - 1, to.getY(), null);
+            }
+            else {
+                Piece rook = this.getPiece(to.getX() + 1, to.getY());
+                this.setPiece(0, to.getY(), rook);
+                this.setPiece(to.getX() + 1, to.getY(), null);
+            }
+            this.setPiece(to, null);
+        }
         else {
             this.setPiece(to, m.getOriginalPiece());
+        }
+        if (p instanceof PieceFirstMove) {
+            ((PieceFirstMove)p).unmove();
         }
         this.togglePlayerTurn();
     }

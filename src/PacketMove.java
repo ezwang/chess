@@ -34,7 +34,7 @@ public class PacketMove implements Packet {
         GameState state = c.getGameState();
         state.move(old, now, transform);
 
-        c.getGUI().addMove(now);
+        c.getGUI().addMove(new Move(old, now));
         c.update();
     }
 

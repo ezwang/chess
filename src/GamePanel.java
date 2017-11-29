@@ -26,8 +26,8 @@ public class GamePanel extends JPanel {
         this.add(board, BorderLayout.CENTER);
     }
 
-    public void addMove(Location loc) {
-        info.addMove(loc);
+    public void addMove(Move move) {
+        info.addMove(move);
     }
 
     public void update() {
