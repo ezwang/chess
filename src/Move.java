@@ -1,9 +1,19 @@
 public class Move implements Comparable<Move> {
     private final Location from, to;
+    private final Piece originalPiece, newPiece;
 
     public Move(Location from, Location to) {
         this.from = from;
         this.to = to;
+        this.originalPiece = null;
+        this.newPiece = null;
+    }
+
+    public Move(Location from, Location to, Piece fromPiece, Piece toPiece) {
+        this.from = from;
+        this.to = to;
+        this.originalPiece = fromPiece;
+        this.newPiece = toPiece;
     }
 
     public Location getFrom() {
@@ -12,6 +22,14 @@ public class Move implements Comparable<Move> {
 
     public Location getTo() {
         return to;
+    }
+
+    public Piece getOriginalPiece() {
+        return originalPiece;
+    }
+
+    public Piece getNewPiece() {
+        return newPiece;
     }
 
     @Override

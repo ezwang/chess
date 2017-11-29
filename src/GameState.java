@@ -1,3 +1,4 @@
+import java.util.LinkedList;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -7,6 +8,8 @@ public class GameState {
     private boolean isWhite;
     private boolean isWhiteTurn;
 
+    private LinkedList<Move> history;
+
     public GameState(String player, String opponent, boolean isWhite) {
         this.player = player;
         this.opponent = opponent;
@@ -14,6 +17,7 @@ public class GameState {
         this.isWhiteTurn = true;
 
         board = new Piece[8][8];
+        history = new LinkedList<Move>();
 
         setupBoard();
     }
@@ -175,5 +179,46 @@ public class GameState {
 
     public void togglePlayerTurn() {
         isWhiteTurn = !isWhiteTurn;
+    }
+
+    public void move(Location old, Location now, String transform) {
+        Piece p = this.getPiece(old.getX(), old.getY());
+        Piece orig = this.getPiece(now.getX(), now.getY());
+        this.setPiece(old.getX(), old.getY(), null);
+        if (transform == null) {
+            this.setPiece(now.getX(), now.getY(), p);
+            p.setNewLocation(now);
+        }
+        else {
+            switch (transform) {
+                case "Rook":
+                    p = new Rook(p.getIsWhite(), this, now);
+                    break;
+                case "Bishop":
+                    p = new Bishop(p.getIsWhite(), this, now);
+                    break;
+                case "Knight":
+                    p = new Knight(p.getIsWhite(), this, now);
+                    break;
+                default:
+                    p = new Queen(p.getIsWhite(), this, now);
+            }
+            this.setPiece(now.getX(), now.getY(), p);
+        }
+        history.add(new Move(old, now, orig, p));
+    }
+
+    /**
+     * Undo a move. Throws a NoSuchElementException if there are
+     * no more moves to undo.
+     */
+    public void undo() {
+        Move m = history.removeLast();
+        Location from = m.getFrom();
+        Location to = m.getTo();
+        Piece p = m.getNewPiece();
+        p.setNewLocation(from);
+        this.setPiece(from.getX(), from.getY(), p);
+        this.setPiece(to.getX(), to.getY(), m.getOriginalPiece());
     }
 }

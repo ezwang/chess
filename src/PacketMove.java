@@ -33,30 +33,9 @@ public class PacketMove implements Packet {
     @Override
     public void processClient(ClientConnection c) throws UnsupportedOperationException {
         GameState state = c.getGameState();
+        state.move(old, now, transform);
         state.togglePlayerTurn();
-        Piece p = state.getPiece(old.getX(), old.getY());
-        state.setPiece(old.getX(), old.getY(), null);
-        if (transform == null) {
-            state.setPiece(now.getX(), now.getY(), p);
-            p.setNewLocation(now);
-        }
-        else {
-            Piece np;
-            switch (transform) {
-                case "Rook":
-                    np = new Rook(p.getIsWhite(), state, now);
-                    break;
-                case "Bishop":
-                    np = new Bishop(p.getIsWhite(), state, now);
-                    break;
-                case "Knight":
-                    np = new Knight(p.getIsWhite(), state, now);
-                    break;
-                default:
-                    np = new Queen(p.getIsWhite(), state, now);
-            }
-            state.setPiece(now.getX(), now.getY(), np);
-        }
+
         c.getGUI().addMove(now);
         c.update();
     }

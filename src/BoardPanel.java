@@ -65,6 +65,16 @@ public class BoardPanel extends JPanel {
                                 return;
                             }
                         }
+
+                        state.move(selected, mv, null);
+                        boolean nowInCheck = state.checkInCheck(state.playerIsWhite());
+                        state.undo();
+
+                        if (nowInCheck) {
+                            client.addChat("Performing that move would put you in check!");
+                            return;
+                        }
+
                         Packet movePacket;
                         // this case handles pawn promotion
                         if (op instanceof Pawn && (mv.getY() == 0 || mv.getY() == 7)) {
