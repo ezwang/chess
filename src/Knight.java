@@ -21,7 +21,7 @@ public class Knight extends Piece {
         Iterator<Location> i = moves.iterator();
         while (i.hasNext()) {
             Location l = i.next();
-            if (!gameState.onBoard(l.getX(), l.getY()) || gameState.isSameColor(l.getX(), l.getY(), getIsWhite())) {
+            if (!gameState.onBoard(l) || gameState.isSameColor(l, getIsWhite())) {
                 i.remove();
             }
         }

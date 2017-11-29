@@ -16,7 +16,7 @@ public class King extends Piece {
                     continue;
                 }
                 Location n = loc.translate(i, j);
-                if (gameState.onBoard(n.getX(), n.getY()) && !gameState.isSameColor(n.getX(), n.getY(), getIsWhite())) {
+                if (gameState.onBoard(n) && !gameState.isSameColor(n, getIsWhite())) {
                     moves.add(n);
                 }
             }

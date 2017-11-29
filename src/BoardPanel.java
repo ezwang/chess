@@ -46,7 +46,7 @@ public class BoardPanel extends JPanel {
 
                 Piece op = null;
                 if (selected != null) {
-                    op = state.getPiece(selected.getX(), selected.getY());
+                    op = state.getPiece(selected);
                 }
                 Piece p = state.getPiece(x, state.playerIsWhite() ? 7-y : y);
                 Location mv = new Location(x, state.playerIsWhite() ? 7-y : y);

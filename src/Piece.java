@@ -59,9 +59,9 @@ public abstract class Piece implements Comparable<Piece> {
         Set<Location> moves = new TreeSet<Location>();
         for (Location dir : directions) {
             Location n = loc.translate(dir);
-            while (gameState.onBoard(n.getX(), n.getY()) && !gameState.isSameColor(n.getX(), n.getY(), isWhite)) {
+            while (gameState.onBoard(n) && !gameState.isSameColor(n, isWhite)) {
                 moves.add(n);
-                if (gameState.isOccupied(n.getX(), n.getY())) {
+                if (gameState.isOccupied(n)) {
                     break;
                 }
                 n = n.translate(dir);
@@ -87,10 +87,10 @@ public abstract class Piece implements Comparable<Piece> {
         for (Location l : dir) {
             if (isDirectionCorrect(l, dest)) {
                 TreeSet<Location> out = new TreeSet<Location>();
-                Location curr = this.loc.translate(l.getX(), l.getY());
+                Location curr = this.loc.translate(l);
                 while (!curr.equals(dest)) {
                     out.add(curr);
-                    curr = curr.translate(l.getX(), l.getY());
+                    curr = curr.translate(l);
                 }
                 return out;
             }
@@ -107,11 +107,11 @@ public abstract class Piece implements Comparable<Piece> {
      */
     private boolean isDirectionCorrect(Location dir, Location dest) {
         Location curr = this.loc;
-        while (gameState.onBoard(curr.getX(), curr.getY())) {
+        while (gameState.onBoard(curr)) {
             if (dest.equals(curr)) {
                 return true;
             }
-            curr = curr.translate(dir.getX(), dir.getY());
+            curr = curr.translate(dir);
         }
         return false;
     }

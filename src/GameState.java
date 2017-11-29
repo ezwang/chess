@@ -82,26 +82,50 @@ public class GameState {
         return board[y][x];
     }
 
+    public Piece getPiece(Location loc) {
+        return getPiece(loc.getX(), loc.getY());
+    }
+
     public boolean onBoard(int x, int y) {
         return x >= 0 && y >= 0 && x < 8 && y < 8;
+    }
+
+    public boolean onBoard(Location loc) {
+        return onBoard(loc.getX(), loc.getY());
     }
 
     public boolean isOccupied(int x, int y) {
         return onBoard(x, y) && board[y][x] != null;
     }
 
+    public boolean isOccupied(Location loc) {
+        return isOccupied(loc.getX(), loc.getY());
+    }
+
     public boolean isSameColor(int x, int y, boolean isWhite) {
         return isOccupied(x, y) && board[y][x].getIsWhite() == isWhite;
+    }
+
+    public boolean isSameColor(Location loc, boolean isWhite) {
+        return isSameColor(loc.getX(), loc.getY(), isWhite);
     }
 
     public boolean isDifferentColor(int x, int y, boolean isWhite) {
         return isOccupied(x, y) && board[y][x].getIsWhite() != isWhite;
     }
 
+    public boolean isDifferentColor(Location loc, boolean isWhite) {
+        return isDifferentColor(loc.getX(), loc.getY(), isWhite);
+    }
+
     public void setPiece(int x, int y, Piece p) {
         if (x >= 0 && y >= 0 && x < 8 && y < 8) {
             board[y][x] = p;
         }
+    }
+
+    public void setPiece(Location loc, Piece p) {
+        setPiece(loc.getX(), loc.getY(), p);
     }
 
     private Set<Piece> getPiecesByColor(boolean isWhite) {
@@ -206,11 +230,11 @@ public class GameState {
      *                  otherwise.
      */
     public void move(Location old, Location now, String transform) {
-        Piece p = this.getPiece(old.getX(), old.getY());
-        Piece orig = this.getPiece(now.getX(), now.getY());
-        this.setPiece(old.getX(), old.getY(), null);
+        Piece p = this.getPiece(old);
+        Piece orig = this.getPiece(now);
+        this.setPiece(old, null);
         if (transform == null) {
-            this.setPiece(now.getX(), now.getY(), p);
+            this.setPiece(now, p);
             p.setLocation(now);
         }
         else {
@@ -227,7 +251,7 @@ public class GameState {
                 default:
                     p = new Queen(p.getIsWhite(), this, now);
             }
-            this.setPiece(now.getX(), now.getY(), p);
+            this.setPiece(now, p);
         }
         history.add(new Move(old, now, orig, p));
         this.togglePlayerTurn();
@@ -245,8 +269,8 @@ public class GameState {
         Location to = m.getTo();
         Piece p = m.getNewPiece();
         p.setLocation(from);
-        this.setPiece(from.getX(), from.getY(), p);
-        this.setPiece(to.getX(), to.getY(), m.getOriginalPiece());
+        this.setPiece(from, p);
+        this.setPiece(to, m.getOriginalPiece());
         this.togglePlayerTurn();
     }
 }
