@@ -16,7 +16,7 @@ public class InfoPanel extends JPanel {
 
     private boolean offeringDraw;
 
-    private JButton drawButton, endButton, backButton;
+    private JButton drawButton, endButton, backButton, undoButton;
     private JTextArea chatOutput;
     private JTextField chatInput;
 
@@ -90,6 +90,16 @@ public class InfoPanel extends JPanel {
         });
         controls.add(endButton);
 
+        undoButton = new JButton("Undo");
+        undoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Packet p = new PacketUndo();
+                c.sendPacket(p);
+            }
+        });
+        controls.add(undoButton);
+
         backButton = new JButton("Play Again");
         backButton.setVisible(false);
         backButton.addActionListener(new ActionListener() {
@@ -136,6 +146,7 @@ public class InfoPanel extends JPanel {
         turn.setForeground(Color.BLUE);
         drawButton.setVisible(false);
         endButton.setVisible(false);
+        undoButton.setVisible(false);
         backButton.setVisible(true);
     }
 
@@ -146,5 +157,20 @@ public class InfoPanel extends JPanel {
 
     public void addChat(String message) {
         chatOutput.append(message + "\n");
+    }
+
+    public void removeMove() {
+        int lastRow = moves.getRowCount() - 1;
+        if (lastRow < 0) {
+            return;
+        }
+        if (!moves.getValueAt(lastRow, 1).equals("")) {
+            Object keep = moves.getValueAt(lastRow, 0);
+            moves.removeRow(lastRow);
+            moves.addRow(new Object[] { keep, "" });
+        }
+        else {
+            moves.removeRow(lastRow);
+        }
     }
 }

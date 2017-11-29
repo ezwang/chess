@@ -18,6 +18,7 @@ public class ServerConnection implements Runnable {
     private Gson gson;
 
     private boolean draw;
+    private boolean undo;
     private boolean gameEnded;
 
     public ServerConnection(Server server, Socket sock) throws IOException {
@@ -109,5 +110,13 @@ public class ServerConnection implements Runnable {
 
     public void endGame() {
         gameEnded = true;
+    }
+
+    public boolean getUndo() {
+        return undo;
+    }
+
+    public void setUndo(boolean undo) {
+        this.undo = undo;
     }
 }

@@ -166,4 +166,8 @@ public class ClientConnection implements Runnable {
     public String getNickname() {
         return nick;
     }
+
+    public void undo() {
+        gui.undo();
+    }
 }

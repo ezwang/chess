@@ -34,7 +34,6 @@ public class PacketMove implements Packet {
     public void processClient(ClientConnection c) throws UnsupportedOperationException {
         GameState state = c.getGameState();
         state.move(old, now, transform);
-        state.togglePlayerTurn();
 
         c.getGUI().addMove(now);
         c.update();

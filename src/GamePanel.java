@@ -39,4 +39,10 @@ public class GamePanel extends JPanel {
     public void addChat(String message) {
         info.addChat(message);
     }
+
+    public void undo() {
+        state.undo();
+        info.removeMove();
+        update();
+    }
 }

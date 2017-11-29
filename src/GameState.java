@@ -206,13 +206,16 @@ public class GameState {
             this.setPiece(now.getX(), now.getY(), p);
         }
         history.add(new Move(old, now, orig, p));
+        this.togglePlayerTurn();
     }
 
     /**
-     * Undo a move. Throws a NoSuchElementException if there are
-     * no more moves to undo.
+     * Undo a move. Does nothing if there are no moves to undo.
      */
     public void undo() {
+        if (history.size() == 0) {
+            return;
+        }
         Move m = history.removeLast();
         Location from = m.getFrom();
         Location to = m.getTo();
@@ -220,5 +223,6 @@ public class GameState {
         p.setNewLocation(from);
         this.setPiece(from.getX(), from.getY(), p);
         this.setPiece(to.getX(), to.getY(), m.getOriginalPiece());
+        this.togglePlayerTurn();
     }
 }

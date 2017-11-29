@@ -66,6 +66,7 @@ public class BoardPanel extends JPanel {
                             }
                         }
 
+                        // check if moving would put player in check
                         state.move(selected, mv, null);
                         boolean nowInCheck = state.checkInCheck(state.playerIsWhite());
                         state.undo();
