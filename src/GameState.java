@@ -234,6 +234,11 @@ public class GameState {
         Piece orig = this.getPiece(now);
         this.setPiece(old, null);
         if (transform == null) {
+            // en passant
+            if (p instanceof Pawn && orig == null && old.getX() != now.getX()) {
+                orig = this.getPiece(now.getX(), old.getY());
+                this.setPiece(now.getX(), old.getY(), null);
+            }
             this.setPiece(now, p);
             p.setLocation(now);
         }
@@ -268,9 +273,29 @@ public class GameState {
         Location from = m.getFrom();
         Location to = m.getTo();
         Piece p = m.getNewPiece();
+        Piece op = m.getOriginalPiece();
         p.setLocation(from);
         this.setPiece(from, p);
-        this.setPiece(to, m.getOriginalPiece());
+        // en passant
+        if (op instanceof Pawn && !op.getLocation().equals(to)) {
+            this.setPiece(to, null);
+            this.setPiece(op.getLocation(), op);
+        }
+        else {
+            this.setPiece(to, m.getOriginalPiece());
+        }
         this.togglePlayerTurn();
+    }
+
+    /**
+     * Returns a copy of the last move.
+     * @return A copy of the last move. Null if no last move.
+     */
+    public Move getLastMove() {
+        if (history.size() == 0) {
+            return null;
+        }
+        Move m = history.getLast();
+        return new Move(m.getFrom(), m.getTo(), m.getOriginalPiece(), m.getNewPiece());
     }
 }
