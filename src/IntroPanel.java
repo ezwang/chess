@@ -5,7 +5,8 @@ import java.awt.event.*;
 import java.io.*;
 
 /**
- * The panel that is shown when the application first starts.
+ * The panel that is shown when the application first starts. Contains
+ * instructions on how to play and options to play a game or launch the server.
  */
 public class IntroPanel extends JPanel {
     private Game game;

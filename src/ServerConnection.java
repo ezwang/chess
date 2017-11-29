@@ -30,6 +30,9 @@ public class ServerConnection implements Runnable {
         out = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
     }
 
+    /**
+     * Listen for incoming packets and process them as they arrive.
+     */
     public void run() {
         try {
             DataInputStream in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
@@ -65,6 +68,11 @@ public class ServerConnection implements Runnable {
         }
     }
 
+    /**
+     * Send a packet to the client.
+     * @param p The packet that should be sent.
+     * @throws IOException
+     */
     public void sendPacket(Packet p) throws IOException {
         out.writeUTF(p.getClass().getName());
         out.writeUTF(gson.toJson(p));

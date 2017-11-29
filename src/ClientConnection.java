@@ -47,6 +47,10 @@ public class ClientConnection implements Runnable {
         }
     }
 
+    /**
+     * Check whether or not we are still connected to the server.
+     * @return Whether or not client is connected to server.
+     */
     public boolean isConnected() {
         return socket != null && socket.isConnected();
     }
@@ -74,6 +78,9 @@ public class ClientConnection implements Runnable {
         sendPacket(p);
     }
 
+    /**
+     * Listen for packets from the server and process them.
+     */
     public void run() {
         try {
             DataInputStream in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));

@@ -1,10 +1,13 @@
 import javax.swing.*;
+import java.awt.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import java.awt.*;
 
+/**
+ * A panel that contains the game board and information about the current game.
+ */
 public class GamePanel extends JPanel {
     private BoardPanel board;
     private InfoPanel info;

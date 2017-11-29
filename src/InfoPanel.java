@@ -6,6 +6,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * The panel to the right of the game screen that shows game information to
+ * the player.
+ */
 public class InfoPanel extends JPanel {
     private JLabel turn;
     private DefaultTableModel moves;
@@ -27,12 +31,13 @@ public class InfoPanel extends JPanel {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-        JLabel names = new JLabel(state.getPlayerNickname() + " vs. " + state.getOpponentNickname());
+        String vs = state.getPlayerNickname() + " vs. " + state.getOpponentNickname();
+        JLabel names = new JLabel(vs);
         names.setForeground(Color.GRAY);
         names.setAlignmentX(Component.CENTER_ALIGNMENT);
         this.add(names);
 
-        turn = new JLabel(state.isPlayerTurn() ?"Your Turn" : "Opponent's Turn");
+        turn = new JLabel(state.isPlayerTurn() ? "Your Turn" : "Opponent's Turn");
         turn.setAlignmentX(Component.CENTER_ALIGNMENT);
         turn.setForeground(state.isPlayerTurn() ? Color.BLACK : Color.GRAY);
         turn.setFont(new Font("Lucidia", Font.BOLD, 20));
@@ -60,7 +65,9 @@ public class InfoPanel extends JPanel {
         chatInput.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                Packet p = new PacketChat("<" + client.getNickname() + "> " + chatInput.getText());
+                String msg = "<" + client.getNickname() + "> " + chatInput
+                        .getText();
+                Packet p = new PacketChat(msg);
                 c.sendPacket(p);
                 chatInput.setText("");
             }
@@ -136,11 +143,19 @@ public class InfoPanel extends JPanel {
         });
     }
 
+    /**
+     * Update the current turn. Should be called after every move.
+     */
     public void update() {
         turn.setText(state.isPlayerTurn() ? "Your Turn" : "Opponent's Turn");
         turn.setForeground(state.isPlayerTurn() ? Color.BLACK : Color.GRAY);
     }
 
+    /**
+     * Disable all of the components related to the game, show a play again
+     * button, and show the reason for the game ending.
+     * @param message
+     */
     public void endGame(String message) {
         turn.setText(message);
         turn.setForeground(Color.BLUE);
@@ -155,10 +170,18 @@ public class InfoPanel extends JPanel {
         return new Dimension(300, super.getPreferredSize().height);
     }
 
+    /**
+     * Display a message to the user.
+     * @param message The message to display.
+     */
     public void addChat(String message) {
         chatOutput.append(message + "\n");
     }
 
+    /**
+     * Undo the most recent move from the list of moves. Does nothing if
+     * there are no moves.
+     */
     public void removeMove() {
         int lastRow = moves.getRowCount() - 1;
         if (lastRow < 0) {

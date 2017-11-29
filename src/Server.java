@@ -17,9 +17,16 @@ public class Server implements Runnable {
          queue = new LinkedList<ServerConnection>();
     }
 
-    public ServerConnection getMatch(ServerConnection other) {
+    /**
+     * Return an opponent for the player, or null if there are no opponents
+     * available.
+     * @param player The current player.
+     * @return The player's opponent, or null if there are no opponents
+     * available.
+     */
+    public ServerConnection getMatch(ServerConnection player) {
         if (queue.isEmpty()) {
-            queue.add(other);
+            queue.add(player);
             return null;
         }
         else {
@@ -80,13 +87,20 @@ public class Server implements Runnable {
         }
         return backupAddr;
     }
-    
+
+    /**
+     * Starts the server.
+     * @throws IOException
+     */
     public void start() throws IOException {
         server = new ServerSocket(1337);
         thread = new Thread(this);
         thread.start();
     }
 
+    /**
+     * Stops the server and ignores any errors that occur.
+     */
     public void stop() {
         try {
             server.close();
@@ -97,6 +111,10 @@ public class Server implements Runnable {
         }
     }
 
+    /**
+     * Remove a player from the queue.
+     * @param sc The connection to remove from the queue.
+     */
     public void removeFromQueue(ServerConnection sc) {
         queue.remove(sc);
     }

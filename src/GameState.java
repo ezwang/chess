@@ -1,7 +1,8 @@
-import java.util.LinkedList;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
+/**
+ * Stores information about a chess game.
+ */
 public class GameState {
     private Piece[][] board;
     private String player, opponent;
@@ -42,6 +43,9 @@ public class GameState {
         return isWhiteTurn == isWhite;
     }
 
+    /**
+     * Setup a board with all of the pieces in the standard starting position.
+     */
     public void setupBoard() {
         for (int i = 2; i < 6; i++) {
             for (int j = 0; j < 8; j++) {
@@ -70,6 +74,7 @@ public class GameState {
         board[7][3] = new Queen(false, this, new Location(3, 7));
         board[7][4] = new King(false, this, new Location(4, 7));
     }
+
     public Piece getPiece(int x, int y) {
         if (x < 0 || y < 0 || x > 7 || y > 7) {
             return null;
@@ -125,6 +130,11 @@ public class GameState {
         return null;
     }
 
+    /**
+     * Checks if a player is in check.
+     * @param isWhite Which player to check.
+     * @return Whether or not the player is in check.
+     */
     public boolean checkInCheck(boolean isWhite) {
         Set<Piece> pieces = getPiecesByColor(!isWhite);
         Location king = getKing(isWhite).getLocation();
@@ -137,6 +147,12 @@ public class GameState {
         return false;
     }
 
+    /**
+     * Return all possible moves that can escape check. If the set is empty,
+     * then the game is over (checkmate).
+     * @param isWhite Which player to use.
+     * @return A set of all allowed moves to escape check.
+     */
     public Set<Move> getPossibleMovesUnderCheck(boolean isWhite) {
         Set<Move> out = new TreeSet<Move>();
         King king = getKing(isWhite);
@@ -181,13 +197,21 @@ public class GameState {
         isWhiteTurn = !isWhiteTurn;
     }
 
+    /**
+     * Move a piece.
+     * @param old The old location of the piece.
+     * @param now The new location of the piece.
+     * @param transform If this is a pawn promotion, the piece to promote
+     *                  the pawn into (Queen, Rook, Bishop, Knight). Null
+     *                  otherwise.
+     */
     public void move(Location old, Location now, String transform) {
         Piece p = this.getPiece(old.getX(), old.getY());
         Piece orig = this.getPiece(now.getX(), now.getY());
         this.setPiece(old.getX(), old.getY(), null);
         if (transform == null) {
             this.setPiece(now.getX(), now.getY(), p);
-            p.setNewLocation(now);
+            p.setLocation(now);
         }
         else {
             switch (transform) {
@@ -220,7 +244,7 @@ public class GameState {
         Location from = m.getFrom();
         Location to = m.getTo();
         Piece p = m.getNewPiece();
-        p.setNewLocation(from);
+        p.setLocation(from);
         this.setPiece(from.getX(), from.getY(), p);
         this.setPiece(to.getX(), to.getY(), m.getOriginalPiece());
         this.togglePlayerTurn();

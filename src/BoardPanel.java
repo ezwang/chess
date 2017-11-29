@@ -207,6 +207,11 @@ public class BoardPanel extends JPanel {
 
     private Set<Move> movesUnderCheck;
 
+    /**
+     * Recomputes information about the current game, such as who is in check
+     * and the valid moves that can be made under check. Should be called
+     * every turn.
+     */
     public void update() {
         blackInCheck = state.checkInCheck(false);
         whiteInCheck = state.checkInCheck(true);

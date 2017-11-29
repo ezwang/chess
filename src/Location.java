@@ -1,3 +1,7 @@
+/**
+ * Represents a location on the chessboard. Does not have to be a real
+ * location (ex: could have negative values).
+ */
 public class Location implements Comparable<Location> {
     private int x;
     private int y;
@@ -15,7 +19,13 @@ public class Location implements Comparable<Location> {
         return y;
     }
 
-    public static String getLetterFromNumber(int num) {
+    /**
+     * Gets the chess notation symbol (a to h) for a certain number.
+     * @param num The value of the vertical position, starting at 0.
+     * @return The chess notation for that value. Returns "?" for an invalid
+     * value.
+     */
+    private static String getLetterFromNumber(int num) {
         switch (num) {
             case 0:
                 return "a";
@@ -38,10 +48,21 @@ public class Location implements Comparable<Location> {
         }
     }
 
+    /**
+     * Create a new location by shifting the current location.
+     * @param x How much to shift to the right.
+     * @param y How much to shift to the top.
+     * @return A new location shifted by the specified amount.
+     */
     public Location translate(int x, int y) {
         return new Location(this.x + x, this.y + y);
     }
 
+    /**
+     * Create a new location by shifting the current location.
+     * @param l The location to shift by.
+     * @return A new location shifted by the specified amount.
+     */
     public Location translate(Location l) {
         return new Location(this.x + l.getX(), this.y + l.getY());
     }

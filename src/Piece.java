@@ -1,5 +1,8 @@
 import java.util.*;
 
+/**
+ * Represents a piece on the chessboard.
+ */
 public abstract class Piece implements Comparable<Piece> {
     protected Location loc;
 
@@ -33,14 +36,25 @@ public abstract class Piece implements Comparable<Piece> {
      */
     public abstract String getNotationSymbol();
 
+    /**
+     * Get the color of this piece.
+     * @return True if this piece is white, false if this piece is black.
+     */
     public boolean getIsWhite() {
         return isWhite;
     }
 
-    public void setNewLocation(Location loc) {
+    public void setLocation(Location loc) {
         this.loc = loc;
     }
 
+    /**
+     * Used by the queen, rook, and bishop classes to calculate movable
+     * locations according to a set of directions that the piece can move.
+     * @param directions A set of locations representing directions that the
+     *                   piece can move in (ex: (-1, 0)).
+     * @return A set of locations that the piece can move to.
+     */
     protected Set<Location> getLocationsByDirection(Location[] directions) {
         Set<Location> moves = new TreeSet<Location>();
         for (Location dir : directions) {
@@ -60,8 +74,17 @@ public abstract class Piece implements Comparable<Piece> {
         return loc;
     }
 
-    protected Set<Location> tryDirectionsPathToPiece(Location[] loc, Location dest) {
-        for (Location l : loc) {
+    /**
+     * Given a set of directions, see which direction has a path from the
+     * current piece to the target location.
+     * @param dir A set of directions to try.
+     * @param dest The target location.
+     * @return A path from the current piece to the target location,
+     * excluding the current piece and the target location.
+     */
+    protected Set<Location> tryDirectionsPathToPiece(Location[] dir, Location
+            dest) {
+        for (Location l : dir) {
             if (isDirectionCorrect(l, dest)) {
                 TreeSet<Location> out = new TreeSet<Location>();
                 Location curr = this.loc.translate(l.getX(), l.getY());
@@ -75,6 +98,13 @@ public abstract class Piece implements Comparable<Piece> {
         return new TreeSet<Location>();
     }
 
+    /**
+     * Check if a location lies in a particular direction relative to the
+     * current piece.
+     * @param dir The direction to test.
+     * @param dest The location that we are looking for.
+     * @return Whether the location lies in the direction.
+     */
     private boolean isDirectionCorrect(Location dir, Location dest) {
         Location curr = this.loc;
         while (gameState.onBoard(curr.getX(), curr.getY())) {
