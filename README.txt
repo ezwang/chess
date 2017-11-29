@@ -27,15 +27,17 @@ PennKey: ezwang
 - Provide an overview of each of the classes in your code, and what their
   function is in the overall game.
 
+    
 
 - Were there any significant stumbling blocks while you were implementing your
   game (related to your design, or otherwise)?
 
+    
 
 - Evaluate your design. Is there a good separation of functionality? How well is
   private state encapsulated? What would you refactor, if given the chance?
 
-
+    
 
 ========================
 =: External Resources :=
@@ -58,4 +60,4 @@ PennKey: ezwang
     - https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Chess_plt45.svg/480px-Chess_plt45.svg.png
     - https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Chess_pdt45.svg/480px-Chess_pdt45.svg.png
 
-    Google GSON
+    Google GSON - https://github.com/google/gson
