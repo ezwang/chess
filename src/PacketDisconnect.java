@@ -6,12 +6,12 @@ import java.io.IOException;
  */
 public class PacketDisconnect implements Packet {
     @Override
-    public void processClient(ClientConnection c) throws UnsupportedOperationException, IOException {
+    public void processClient(ClientConnection c) {
         c.endGame("Opponent Disconnected");
     }
 
     @Override
-    public void processServer(ServerConnection c) throws UnsupportedOperationException, IOException {
+    public void processServer(ServerConnection c) throws UnsupportedOperationException {
         throw new UnsupportedOperationException();
     }
 }

@@ -2,8 +2,8 @@ import java.io.IOException;
 
 public class PacketDraw implements Packet {
     @Override
-    public void processClient(ClientConnection c) throws UnsupportedOperationException, IOException {
-
+    public void processClient(ClientConnection c) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException();
     }
 
     @Override

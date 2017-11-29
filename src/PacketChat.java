@@ -8,7 +8,7 @@ public class PacketChat implements Packet {
     }
 
     @Override
-    public void processClient(ClientConnection c) throws IOException {
+    public void processClient(ClientConnection c) {
         c.addChat(message);
     }
 

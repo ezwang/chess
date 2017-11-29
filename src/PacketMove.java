@@ -1,8 +1,7 @@
 import java.io.IOException;
 
 /**
- * A packet that represents a player moving a piece
- * on the chessboard.
+ * A packet that represents a player moving a piece on the chessboard.
  */
 public class PacketMove implements Packet {
     private Location old, now;
@@ -31,7 +30,7 @@ public class PacketMove implements Packet {
     }
 
     @Override
-    public void processClient(ClientConnection c) throws UnsupportedOperationException {
+    public void processClient(ClientConnection c) {
         GameState state = c.getGameState();
         state.move(old, now, transform);
 
