@@ -44,6 +44,17 @@ public class GameState {
     }
 
     /**
+     * Setup a board with no pieces. Used for testing.
+     */
+    public void setupEmptyBoard() {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                board[i][j] = null;
+            }
+        }
+    }
+
+    /**
      * Setup a board with all of the pieces in the standard starting position.
      */
     public void setupBoard() {
@@ -243,6 +254,15 @@ public class GameState {
 
     public void togglePlayerTurn() {
         isWhiteTurn = !isWhiteTurn;
+    }
+
+    /**
+     * Move a piece.
+     * @param from The old location of the piece.
+     * @param to The new location of the piece.
+     */
+    public void move(Location from, Location to) {
+        move(from, to, null);
     }
 
     /**
