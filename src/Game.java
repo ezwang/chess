@@ -18,11 +18,11 @@ public class Game implements Runnable {
     public void setContent(JPanel panel) {
         frame.setContentPane(panel);
         this.resizeWindow();
-        frame.setLocationRelativeTo(null);
     }
 
     public void resizeWindow() {
         frame.pack();
+        frame.setLocationRelativeTo(null);
     }
 
     /**

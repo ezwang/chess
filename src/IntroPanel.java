@@ -10,12 +10,15 @@ import java.io.*;
  */
 public class IntroPanel extends JPanel {
     private Game game;
+    private Server server;
 
     private JLabel clientStatusLabel;
     private JLabel serverStatusLabel;
 
     private JTextField ipField, nicknameField;
     private JButton startGameButton, serverButton;
+
+    private static final String ABOUT_TEXT = "Created by Eric Wang - CIS 120 Final Project";
 
     public IntroPanel(Game game) {
         this.game = game;
@@ -89,12 +92,25 @@ public class IntroPanel extends JPanel {
         serverButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                Server s = new Server();
                 try {
-                    s.start();
+                    if (server == null) {
+                        server = new Server();
+                        server.start();
 
-                    serverStatusLabel.setText("<html><body style='width: 400px; text-align:center'>Server started! Connect to the server at: <b>" + Server.getServerIP() + "</b><br />" + "Closing this window will close the server. Keep this window open until you are done playing the game!</body></html>");
-                    toggleControls(false);
+                        serverStatusLabel.setText("<html><body style='width: 400px; text-align:center'>Server started! Connect to the server at: <b>" + Server.getServerIP() + "</b><br />" + "Closing this window will close the server. Keep this window open until you are done playing the game!</body></html>");
+                        toggleControls(false);
+
+                        serverButton.setText("Stop Server");
+                        serverButton.setEnabled(true);
+                    }
+                    else {
+                        server.stop();
+                        server = null;
+
+                        serverButton.setText("Start Server");
+                        serverStatusLabel.setText(ABOUT_TEXT);
+                        toggleControls(true);
+                    }
 
                     // resize the window to accommodate the additional text
                     // that appears at the bottom of the screen
@@ -108,7 +124,7 @@ public class IntroPanel extends JPanel {
         });
         controls.add(serverButton, BorderLayout.EAST);
 
-        serverStatusLabel = new JLabel("Created by Eric Wang - CIS 120 Final Project", SwingConstants.CENTER);
+        serverStatusLabel = new JLabel(ABOUT_TEXT, SwingConstants.CENTER);
         serverStatusLabel.setBorder(new EmptyBorder(10, 0, 0, 0));
         serverStatusLabel.setForeground(Color.BLUE);
         controls.add(serverStatusLabel, BorderLayout.SOUTH);
