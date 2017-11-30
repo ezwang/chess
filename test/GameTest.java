@@ -226,4 +226,15 @@ public class GameTest {
         assertTrue(state.isProtected(new Location(1, 0), false));
         assertFalse(state.getPiece(kingLoc).getMovableLocations().contains(c));
     }
+
+    @Test
+    public void testFourMoveCheckmate() {
+        state.move(new Location(5, 1), new Location(5, 2));
+        state.move(new Location(4, 6), new Location(4, 4));
+        state.move(new Location(6, 1), new Location(6, 3));
+        state.move(new Location(3, 7), new Location(7, 3));
+
+        assertTrue(state.checkInCheck(true));
+        assertEquals(0, state.getPossibleMovesUnderCheck(true).size());
+    }
 }
