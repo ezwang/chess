@@ -189,4 +189,20 @@ public class GameTest {
         Location c = new Location(2, 0);
         assertFalse(state.getPiece(kingLoc).getMovableLocations().contains(c));
     }
+
+    @Test
+    public void testCastlingLineOfFire() {
+        state.setupEmptyBoard();
+        Location kingLoc = new Location(4, 0);
+        state.setPiece(kingLoc, new King(true, state, kingLoc));
+        Location rookLoc = new Location(0, 0);
+        state.setPiece(rookLoc, new Rook(true, state, rookLoc));
+
+        Location enemyRookLoc = new Location(1, 5);
+        state.setPiece(enemyRookLoc, new Rook(false, state, enemyRookLoc));
+
+        Location c = new Location(2, 0);
+        assertTrue(state.isProtected(new Location(1, 0), false));
+        assertFalse(state.getPiece(kingLoc).getMovableLocations().contains(c));
+    }
 }

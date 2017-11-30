@@ -37,6 +37,10 @@ public class King extends PieceFirstMove {
                             pieceBetween = true;
                             break;
                         }
+                        if (gameState.isProtected(tmp, !getIsWhite())) {
+                            pieceBetween = true;
+                            break;
+                        }
                         tmp = tmp.translate(1, 0);
                     }
                     if (!pieceBetween) {
@@ -47,6 +51,10 @@ public class King extends PieceFirstMove {
                     tmp = tmp.translate(-1, 0);
                     while (!tmp.equals(r.getLocation())) {
                         if (gameState.isOccupied(tmp)) {
+                            pieceBetween = true;
+                            break;
+                        }
+                        if (gameState.isProtected(tmp, !getIsWhite())) {
                             pieceBetween = true;
                             break;
                         }
