@@ -112,6 +112,25 @@ public class GameTest {
     }
 
     @Test
+    public void testCheckingBlock() {
+        state.setupEmptyBoard();
+        King king = new King(false, state, new Location(0, 0));
+        state.setPiece(king.getLocation(), king);
+        Rook rook1 = new Rook(true, state, new Location(7, 0));
+        state.setPiece(rook1.getLocation(), rook1);
+        Rook rook2 = new Rook(true, state, new Location(7, 1));
+        state.setPiece(rook2.getLocation(), rook2);
+
+        Rook defender = new Rook(false, state, new Location(5, 7));
+        state.setPiece(defender.getLocation(), defender);
+
+        assertTrue(state.checkInCheck(false));
+        Set<Move> expected = new TreeSet<Move>();
+        expected.add(new Move(defender.getLocation(), new Location(5, 0)));
+        assertEquals(expected, state.getPossibleMovesUnderCheck(false));
+    }
+
+    @Test
     public void testCastlingLeft() {
         state.setupEmptyBoard();
         Location kingLoc = new Location(4, 0);
