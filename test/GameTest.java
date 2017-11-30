@@ -64,6 +64,27 @@ public class GameTest {
     }
 
     @Test
+    public void testRookMove() {
+        state.setupEmptyBoard();
+        Rook rook = new Rook(true, state, new Location(0, 0));
+        state.setPiece(rook.getLocation(), rook);
+
+        Knight knight = new Knight(false, state, new Location(0, 3));
+        state.setPiece(knight.getLocation(), knight);
+
+        Knight knight2 = new Knight(true, state, new Location(3, 0));
+        state.setPiece(knight2.getLocation(), knight2);
+
+        Set<Location> expected = new TreeSet<Location>();
+        expected.add(new Location(0, 1));
+        expected.add(new Location(0, 2));
+        expected.add(new Location(0, 3));
+        expected.add(new Location(1, 0));
+        expected.add(new Location(2, 0));
+        assertEquals(expected, rook.getMovableLocations());
+    }
+
+    @Test
     public void testProtectedLocation() {
         state.setupEmptyBoard();
         Bishop bishop = new Bishop(true, state, new Location(7, 7));
