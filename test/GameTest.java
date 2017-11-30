@@ -1,6 +1,7 @@
 import static org.junit.Assert.*;
 
 import org.junit.*;
+import sun.reflect.generics.tree.Tree;
 
 import java.util.*;
 
@@ -60,6 +61,54 @@ public class GameTest {
         expected.add(new Location(0, 2));
         expected.add(new Location(2, 2));
         assertEquals(expected, state.getPiece(1, 0).getMovableLocations());
+    }
+
+    @Test
+    public void testProtectedLocation() {
+        state.setupEmptyBoard();
+        Bishop bishop = new Bishop(true, state, new Location(7, 7));
+        state.setPiece(bishop.getLocation(), bishop);
+
+        assertTrue(state.isProtected(new Location(0, 0), true));
+        assertTrue(state.isProtected(new Location(1, 1), true));
+    }
+
+    @Test
+    public void testProtectedOccupiedLocation() {
+        Queen queen = new Queen(true, state, new Location(1, 1));
+        state.setPiece(queen.getLocation(), queen);
+        Bishop bishop = new Bishop(true, state, new Location(7, 7));
+        state.setPiece(bishop.getLocation(), bishop);
+
+        assertTrue(state.isProtected(new Location(1, 1), true));
+    }
+
+    @Test
+    public void testCheckmate() {
+        state.setupEmptyBoard();
+        King king = new King(false, state, new Location(0, 0));
+        state.setPiece(king.getLocation(), king);
+        Queen queen = new Queen(true, state, new Location(1, 1));
+        state.setPiece(queen.getLocation(), queen);
+        Bishop bishop = new Bishop(true, state, new Location(7, 7));
+        state.setPiece(bishop.getLocation(), bishop);
+
+        assertTrue(state.checkInCheck(false));
+        assertEquals(new TreeSet<Move>(), state.getPossibleMovesUnderCheck(false));
+    }
+
+    @Test
+    public void testCheckKingCapture() {
+        state.setupEmptyBoard();
+        King king = new King(false, state, new Location(0, 0));
+        state.setPiece(king.getLocation(), king);
+        Queen queen = new Queen(true, state, new Location(1, 1));
+        state.setPiece(queen.getLocation(), queen);
+
+        assertTrue(state.checkInCheck(false));
+        Set<Move> expected = new TreeSet<Move>();
+        expected.add(new Move(king.getLocation(), queen.getLocation()));
+        assertEquals(expected, state.getPossibleMovesUnderCheck(false));
     }
 
     @Test
