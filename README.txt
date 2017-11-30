@@ -50,7 +50,7 @@ PennKey: ezwang
         GamePanel: A wrapper for the information and board.
         InfoPanel: A panel containing information about the game.
         BoardPanel: The chess board and pieces.
-    Game
+    Game: The entry point for the game.
         GameState: A data structure containing all the information in a chess game.
         Location: Represents a location on the board.
         Move: Represents a piece move.
@@ -66,12 +66,25 @@ PennKey: ezwang
 - Were there any significant stumbling blocks while you were implementing your
   game (related to your design, or otherwise)?
 
-    
+    It took a while to think of a good structure for the networking. I originally
+    considered Java Serialization, but went with Google GSON to alleviate potential
+    security vulnerabilities.
 
 - Evaluate your design. Is there a good separation of functionality? How well is
   private state encapsulated? What would you refactor, if given the chance?
 
-    
+    The functionality is separated into distinct components, with networking,
+    game state, and the GUI grouped in separate classes. It is possible to create
+    an isolated game state for unit testing purposes.
+
+    Private state is encapsulated quite well, but there are still exposed variables
+    that should be hidden. This is because "private" does not allow classes that
+    extend the current class to access variables. I use the "protected" keyword,
+    but this acts pretty much the same as "public" since the project is not in
+    a package.
+
+    I would have used an enum to represent white/black instead of a boolean. This
+    would make the code easier to read and reduce confusion about method arguments.
 
 ========================
 =: External Resources :=
