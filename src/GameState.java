@@ -133,6 +133,9 @@ public class GameState {
         if (x >= 0 && y >= 0 && x < 8 && y < 8) {
             board[y][x] = p;
         }
+        else {
+            throw new IllegalArgumentException(String.format("Cannot place piece at (%d, %d)!", x, y));
+        }
     }
 
     public void setPiece(Location loc, Piece p) {

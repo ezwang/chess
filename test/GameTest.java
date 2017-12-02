@@ -16,6 +16,23 @@ public class GameTest {
     }
 
     @Test
+    public void testColorMethods() {
+        assertTrue(state.playerIsWhite());
+        assertTrue(state.isPlayerTurn());
+        assertTrue(state.isWhiteTurn());
+    }
+
+    @Test
+    public void testGetPieceInvalid() {
+        assertEquals(null, state.getPiece(-1, -2));
+    }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void testSetPieceInvalid() {
+        state.setPiece(-1, -2, null);
+    }
+
+    @Test
     public void testPawnFirstMove() {
         Set<Location> expected = new TreeSet<Location>();
         expected.add(new Location(0, 2));
@@ -47,9 +64,11 @@ public class GameTest {
     @Test
     public void testEnPassant() {
         state.setupEmptyBoard();
-        Pawn enemyPawn = new Pawn(false, state, new Location(0, 6));
+        Location enemyPawnLoc = new Location(0, 6);
+        Pawn enemyPawn = new Pawn(false, state, enemyPawnLoc);
         state.setPiece(enemyPawn.getLocation(), enemyPawn);
-        Pawn friendlyPawn = new Pawn(true, state, new Location(1,4));
+        Location friendlyPawnLoc = new Location(1,4);
+        Pawn friendlyPawn = new Pawn(true, state, friendlyPawnLoc);
         state.setPiece(friendlyPawn.getLocation(), friendlyPawn);
 
         state.move(enemyPawn.getLocation(), new Location(0, 4));
@@ -65,6 +84,9 @@ public class GameTest {
 
         assertEquals(enemyPawn, state.getPiece(0, 4));
         assertEquals(friendlyPawn, state.getPiece(1, 4));
+
+        assertEquals(friendlyPawnLoc, friendlyPawn.getLocation());
+        assertEquals(enemyPawnLoc, enemyPawn.getLocation());
     }
 
     @Test
@@ -85,6 +107,21 @@ public class GameTest {
         expected.add(new Location(0, 2));
         expected.add(new Location(2, 2));
         assertEquals(expected, state.getPiece(1, 0).getMovableLocations());
+
+        Knight knight = (Knight) state.getPiece(1, 0);
+        Location knightLoc = knight.getLocation();
+        Location newKnightLoc = new Location(0, 2);
+
+        state.move(knightLoc, newKnightLoc);
+
+        assertEquals(knight, state.getPiece(newKnightLoc));
+        assertEquals(newKnightLoc, knight.getLocation());
+
+        state.undo();
+
+        assertEquals(null, state.getPiece(newKnightLoc));
+        assertEquals(knight, state.getPiece(knightLoc));
+        assertEquals(knightLoc, knight.getLocation());
     }
 
     @Test
@@ -143,6 +180,39 @@ public class GameTest {
     }
 
     @Test
+    public void testNotCheck() {
+        state.setupEmptyBoard();
+        King king = new King(false, state, new Location(0, 0));
+        state.setPiece(king.getLocation(), king);
+
+        Rook enemyRook = new Rook(true, state, new Location(7, 0));
+        state.setPiece(enemyRook.getLocation(), enemyRook);
+
+        Rook friendlyRook = new Rook(false, state, new Location(2, 0));
+        state.setPiece(friendlyRook.getLocation(), friendlyRook);
+
+        assertFalse(state.checkInCheck(false));
+    }
+
+    @Test
+    public void testKingQueenMate() {
+        state.setupEmptyBoard();
+        King king = new King(false, state, new Location(0, 0));
+        state.setPiece(king.getLocation(), king);
+
+        Queen enemyQueen = new Queen(true, state, new Location(1, 1));
+        state.setPiece(enemyQueen.getLocation(), enemyQueen);
+
+        assertTrue(state.checkInCheck(false));
+        assertEquals(1, state.getPossibleMovesUnderCheck(false).size());
+
+        King enemyKing = new King(true, state, new Location(2, 2));
+        state.setPiece(enemyKing.getLocation(), enemyKing);
+
+        assertEquals(0, state.getPossibleMovesUnderCheck(false).size());
+    }
+
+    @Test
     public void testCheckKingCapture() {
         state.setupEmptyBoard();
         King king = new King(false, state, new Location(0, 0));
@@ -194,6 +264,14 @@ public class GameTest {
 
         assertEquals(new Location(3, 0), rook.getLocation());
         assertEquals(c, king.getLocation());
+
+        state.undo();
+
+        assertEquals(king, state.getPiece(kingLoc));
+        assertEquals(rook, state.getPiece(rookLoc));
+
+        assertEquals(rookLoc, rook.getLocation());
+        assertEquals(kingLoc, king.getLocation());
     }
 
     @Test
@@ -216,6 +294,14 @@ public class GameTest {
 
         assertEquals(new Location(5, 0), rook.getLocation());
         assertEquals(c, king.getLocation());
+
+        state.undo();
+
+        assertEquals(king, state.getPiece(kingLoc));
+        assertEquals(rook, state.getPiece(rookLoc));
+
+        assertEquals(rookLoc, rook.getLocation());
+        assertEquals(kingLoc, king.getLocation());
     }
 
     @Test
