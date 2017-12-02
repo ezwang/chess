@@ -298,9 +298,17 @@ public class GameState {
      * @param transform If this is a pawn promotion, the piece to promote
      *                  the pawn into (Queen, Rook, Bishop, Knight). Null
      *                  otherwise.
+     * @throws IllegalArgumentException If there is no piece at the from location.
+     * @throws IllegalStateException If a player attempts to move when it is not their turn.
      */
     public void move(Location from, Location to, String transform) {
         Piece p = this.getPiece(from);
+        if (p == null) {
+            throw new IllegalArgumentException(String.format("There is no piece at %s!", from.toString()));
+        }
+        if (isPlayerTurn() != p.getIsWhite()) {
+            throw new IllegalStateException("Cannot move piece of opposite color!");
+        }
         Piece orig = this.getPiece(to);
         this.setPiece(from, null);
         boolean pp = false;
@@ -413,5 +421,13 @@ public class GameState {
         }
         Move m = history.getLast();
         return new Move(m.getFrom(), m.getTo(), m.getOriginalPiece(), m.getNewPiece(), m.isPawnPromotion());
+    }
+
+    /**
+     * Forces a player's turn. Should only be used in testing.
+     * @param white The player that should move now.
+     */
+    public void forcePlayerTurn(boolean white) {
+        isWhiteTurn = white;
     }
 }

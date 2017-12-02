@@ -22,6 +22,16 @@ public class GameTest {
         assertTrue(state.isWhiteTurn());
     }
 
+    @Test(expected=IllegalArgumentException.class)
+    public void testMoveNonexistentPiece() {
+        state.move(new Location(4, 4), new Location(3, 3));
+    }
+
+    @Test(expected=IllegalStateException.class)
+    public void testMoveOutOfTurn() {
+        state.move(new Location(0, 6), new Location(0, 4));
+    }
+
     @Test
     public void testGetPieceInvalid() {
         assertEquals(null, state.getPiece(-1, -2));
@@ -64,6 +74,8 @@ public class GameTest {
     @Test
     public void testEnPassant() {
         state.setupEmptyBoard();
+        state.forcePlayerTurn(false);
+
         Location enemyPawnLoc = new Location(0, 6);
         Pawn enemyPawn = new Pawn(false, state, enemyPawnLoc);
         state.setPiece(enemyPawn.getLocation(), enemyPawn);
@@ -356,6 +368,9 @@ public class GameTest {
         state.setPiece(rookLoc, new Rook(true, state, rookLoc));
 
         state.move(rookLoc, new Location(0, 3));
+
+        state.forcePlayerTurn(true);
+
         state.move(new Location(0, 3), rookLoc);
 
         Location c = new Location(2, 0);
