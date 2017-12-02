@@ -32,6 +32,12 @@ public class GameTest {
         state.move(new Location(0, 6), new Location(0, 4));
     }
 
+    @Test(expected=IllegalStateException.class)
+    public void testNoKingOnBoard() {
+        state.setupEmptyBoard();
+        state.getKing(true);
+    }
+
     @Test
     public void testGetPieceInvalid() {
         assertEquals(null, state.getPiece(-1, -2));
@@ -69,6 +75,34 @@ public class GameTest {
         expected.add(new Location(0, 3));
         state.move(new Location(0, 1), new Location(0, 2));
         assertEquals(expected, state.getPiece(0, 2).getMovableLocations());
+    }
+
+    @Test
+    public void testPawnCapture() {
+        state.setupEmptyBoard();
+
+        Location friendlyPawnLoc = new Location(0, 1);
+        Pawn friendlyPawn = new Pawn(true, state, friendlyPawnLoc);
+        state.setPiece(friendlyPawnLoc, friendlyPawn);
+
+        Location enemyRookLoc = new Location(1, 2);
+        Rook enemyRook = new Rook(false, state, enemyRookLoc);
+        state.setPiece(enemyRookLoc, enemyRook);
+
+        assertTrue(friendlyPawn.getMovableLocations().contains(enemyRookLoc));
+
+        state.move(friendlyPawnLoc, enemyRookLoc);
+
+        assertEquals(enemyRookLoc, friendlyPawn.getLocation());
+        assertEquals(friendlyPawn, state.getPiece(enemyRookLoc));
+        assertEquals(null, state.getPiece(friendlyPawnLoc));
+
+        state.undo();
+
+        assertEquals(enemyRook, state.getPiece(enemyRookLoc));
+        assertEquals(friendlyPawn, state.getPiece(friendlyPawnLoc));
+        assertEquals(friendlyPawnLoc, friendlyPawn.getLocation());
+        assertEquals(enemyRookLoc, enemyRook.getLocation());
     }
 
     @Test

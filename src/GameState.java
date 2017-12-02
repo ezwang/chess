@@ -142,6 +142,11 @@ public class GameState {
         setPiece(loc.getX(), loc.getY(), p);
     }
 
+    /**
+     * Get all pieces on the board with a specified color.
+     * @param isWhite The color of the pieces.
+     * @return A set of pieces with the specified color.
+     */
     private Set<Piece> getPiecesByColor(boolean isWhite) {
         Set<Piece> pieces = new TreeSet<Piece>();
         for (int i = 0; i < 8; i++) {
@@ -159,6 +164,7 @@ public class GameState {
      * Get the King from the chessboard.
      * @param isWhite Which player's king to get.
      * @return The King.
+     * @throws IllegalStateException If the king does not exist.
      */
     public King getKing(boolean isWhite) {
         for (int i = 0; i < 8; i++) {
@@ -170,13 +176,13 @@ public class GameState {
                 }
             }
         }
-        return null;
+        throw new IllegalStateException("There is no " + (isWhite ? "white" : "black") + " king on the board!");
     }
 
     /**
      * Get the rooks from the chessboard.
      * @param isWhite Which player's king to get.
-     * @return A set of rooks.
+     * @return A set of rooks. Returns empty set if there are no rooks.
      */
     public List<Rook> getRooks(boolean isWhite) {
         List<Rook> rooks = new LinkedList<Rook>();
@@ -278,7 +284,11 @@ public class GameState {
         return out;
     }
 
-    public void togglePlayerTurn() {
+    /**
+     * Switches the player turn.
+     * Should not be called externally, the move function switches turns.
+     */
+    private void togglePlayerTurn() {
         isWhiteTurn = !isWhiteTurn;
     }
 
@@ -306,7 +316,7 @@ public class GameState {
         if (p == null) {
             throw new IllegalArgumentException(String.format("There is no piece at %s!", from.toString()));
         }
-        if (isPlayerTurn() != p.getIsWhite()) {
+        if (isWhiteTurn() != p.getIsWhite()) {
             throw new IllegalStateException("Cannot move piece of opposite color!");
         }
         Piece orig = this.getPiece(to);
