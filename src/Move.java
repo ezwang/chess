@@ -8,6 +8,11 @@ public class Move implements Comparable<Move> {
     private final Piece originalPiece, newPiece;
     private final boolean pawnPromotion;
 
+    /**
+     * Represents a move from one location to another.
+     * @param from The original location.
+     * @param to The new location.
+     */
     public Move(Location from, Location to) {
         this.from = from;
         this.to = to;
@@ -16,6 +21,14 @@ public class Move implements Comparable<Move> {
         this.pawnPromotion = false;
     }
 
+    /**
+     * Represents a move with additional information.
+     * @param from The original location.
+     * @param to The new location.
+     * @param fromPiece The piece that was originally in the the new location.
+     * @param toPiece The piece that is now in the new location.
+     * @param isPawnPromotion Whether or not this move is a pawn promotion.
+     */
     public Move(Location from, Location to, Piece fromPiece, Piece toPiece, boolean isPawnPromotion) {
         this.from = from;
         this.to = to;
