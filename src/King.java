@@ -26,7 +26,9 @@ public class King extends PieceFirstMove {
                 }
                 Location n = getLocation().translate(i, j);
                 if (gameState.onBoard(n) && !gameState.isSameColor(n, getIsWhite())) {
-                    moves.add(n);
+                    if (!gameState.isProtectedThroughPiece(n, !getIsWhite(), this)) {
+                        moves.add(n);
+                    }
                 }
             }
         }

@@ -278,9 +278,6 @@ public class GameState {
         }
         // case where you can run away
         for (Location route : routes) {
-            if (isProtectedThroughPiece(route, !isWhite, king)) {
-                continue;
-            }
             out.add(new Move(curr, route));
         }
         // case where you can capture opponent

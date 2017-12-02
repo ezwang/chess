@@ -163,6 +163,7 @@ public class InfoPanel extends JPanel {
         endButton.setVisible(false);
         undoButton.setVisible(false);
         backButton.setVisible(true);
+        chatInput.setEnabled(false);
     }
 
     @Override
