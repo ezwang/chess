@@ -6,19 +6,22 @@
 public class Move implements Comparable<Move> {
     private final Location from, to;
     private final Piece originalPiece, newPiece;
+    private final boolean pawnPromotion;
 
     public Move(Location from, Location to) {
         this.from = from;
         this.to = to;
         this.originalPiece = null;
         this.newPiece = null;
+        this.pawnPromotion = false;
     }
 
-    public Move(Location from, Location to, Piece fromPiece, Piece toPiece) {
+    public Move(Location from, Location to, Piece fromPiece, Piece toPiece, boolean isPawnPromotion) {
         this.from = from;
         this.to = to;
         this.originalPiece = fromPiece;
         this.newPiece = toPiece;
+        this.pawnPromotion = isPawnPromotion;
     }
 
     public Location getFrom() {
@@ -58,5 +61,9 @@ public class Move implements Comparable<Move> {
     @Override
     public String toString() {
         return from + " " + to;
+    }
+
+    public boolean isPawnPromotion() {
+        return pawnPromotion;
     }
 }

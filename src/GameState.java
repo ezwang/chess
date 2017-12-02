@@ -303,6 +303,7 @@ public class GameState {
         Piece p = this.getPiece(from);
         Piece orig = this.getPiece(to);
         this.setPiece(from, null);
+        boolean pp = false;
         if (transform == null) {
             // en passant
             if (p instanceof Pawn && orig == null && from.getX() != to.getX()) {
@@ -328,6 +329,7 @@ public class GameState {
             this.setPiece(to, p);
             p.setLocation(to);
         }
+        // pawn promotion
         else {
             switch (transform) {
                 case "Rook":
@@ -343,11 +345,12 @@ public class GameState {
                     p = new Queen(p.getIsWhite(), this, to);
             }
             this.setPiece(to, p);
+            pp = true;
         }
         if (p instanceof PieceFirstMove) {
             ((PieceFirstMove)p).move();
         }
-        history.add(new Move(from, to, orig, p));
+        history.add(new Move(from, to, orig, p, pp));
         this.togglePlayerTurn();
     }
 
@@ -376,15 +379,22 @@ public class GameState {
                 Piece rook = this.getPiece(to.getX() - 1, to.getY());
                 this.setPiece(7, to.getY(), rook);
                 this.setPiece(to.getX() - 1, to.getY(), null);
+                rook.setLocation(new Location(7, to.getY()));
             }
             else {
                 Piece rook = this.getPiece(to.getX() + 1, to.getY());
                 this.setPiece(0, to.getY(), rook);
                 this.setPiece(to.getX() + 1, to.getY(), null);
+                rook.setLocation(new Location(0, to.getY()));
             }
             this.setPiece(to, null);
         }
+        // captures
         else {
+            // pawn promotion
+            if (m.isPawnPromotion()) {
+                this.setPiece(from, new Pawn(p.getIsWhite(), this, p.getLocation()));
+            }
             this.setPiece(to, m.getOriginalPiece());
         }
         if (p instanceof PieceFirstMove) {
@@ -402,6 +412,6 @@ public class GameState {
             return null;
         }
         Move m = history.getLast();
-        return new Move(m.getFrom(), m.getTo(), m.getOriginalPiece(), m.getNewPiece());
+        return new Move(m.getFrom(), m.getTo(), m.getOriginalPiece(), m.getNewPiece(), m.isPawnPromotion());
     }
 }

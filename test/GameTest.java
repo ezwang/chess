@@ -86,7 +86,7 @@ public class GameTest {
         assertEquals(friendlyPawn, state.getPiece(1, 4));
 
         assertEquals(friendlyPawnLoc, friendlyPawn.getLocation());
-        assertEquals(enemyPawnLoc, enemyPawn.getLocation());
+        assertEquals(new Location(0, 4), enemyPawn.getLocation());
     }
 
     @Test
@@ -99,6 +99,26 @@ public class GameTest {
         state.setPiece(friendlyPawn.getLocation(), friendlyPawn);
 
         assertFalse(friendlyPawn.getMovableLocations().contains(new Location(0, 5)));
+    }
+
+
+    @Test
+    public void testPawnPromotion() {
+        state.setupEmptyBoard();
+
+        Location pawnLoc = new Location(0, 6);
+        Location newPawnLoc = new Location(0, 7);
+        Pawn pawn = new Pawn(true, state, pawnLoc);
+        state.setPiece(pawnLoc, pawn);
+
+        state.move(pawnLoc, newPawnLoc, "Knight");
+
+        assertTrue(state.getPiece(newPawnLoc) instanceof Knight);
+
+        state.undo();
+
+        assertEquals(null, state.getPiece(newPawnLoc));
+        assertEquals(pawn, state.getPiece(pawnLoc));
     }
 
     @Test
