@@ -29,8 +29,10 @@ public class PacketNickname implements Packet {
         c.setOpponent(match);
         match.setOpponent(c);
 
-        Packet p = new PacketStart(c.getNickname(), match.getNickname(), true);
-        Packet p2 = new PacketStart(match.getNickname(), c.getNickname(), false);
+        boolean random = Math.random() > 0.5;
+
+        Packet p = new PacketStart(c.getNickname(), match.getNickname(), random);
+        Packet p2 = new PacketStart(match.getNickname(), c.getNickname(), !random);
 
         c.sendPacket(p);
         match.sendPacket(p2);
