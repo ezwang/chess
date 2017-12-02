@@ -70,6 +70,9 @@ PennKey: ezwang
     considered Java Serialization, but went with Google GSON to alleviate potential
     security vulnerabilities.
 
+    There were a lot of special cases for castling/en passant. Adding unit tests
+    helped to catch most of them.
+
 - Evaluate your design. Is there a good separation of functionality? How well is
   private state encapsulated? What would you refactor, if given the chance?
 
