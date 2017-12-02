@@ -294,6 +294,37 @@ public class GameTest {
     }
 
     @Test
+    public void testDrawByNoPieces() {
+        assertFalse(state.isDraw(true));
+        assertFalse(state.isDraw(false));
+
+        state.setupEmptyBoard();
+        King king = new King(true, state, new Location(0, 0));
+        state.setPiece(king.getLocation(), king);
+
+        King king2 = new King(false, state, new Location(7, 7));
+        state.setPiece(king2.getLocation(), king2);
+
+        assertTrue(state.isDraw(true));
+        assertTrue(state.isDraw(false));
+    }
+
+    @Test
+    public void testDrawByNoMoves() {
+        state.setupEmptyBoard();
+
+        King king = new King(true, state, new Location(0, 0));
+        state.setPiece(king.getLocation(), king);
+
+        Rook rook = new Rook(false, state, new Location(7, 1));
+        Rook rook2 = new Rook(false, state, new Location(1, 7));
+        state.setPiece(rook.getLocation(), rook);
+        state.setPiece(rook2.getLocation(), rook2);
+
+        assertTrue(state.isDraw(true));
+    }
+
+    @Test
     public void testCheckKingCapture() {
         state.setupEmptyBoard();
         King king = new King(false, state, new Location(0, 0));

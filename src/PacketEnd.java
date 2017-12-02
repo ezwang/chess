@@ -28,6 +28,7 @@ public class PacketEnd implements Packet {
                 break;
             case DRAW:
                 c.endGame("Draw!");
+                break;
         }
     }
 

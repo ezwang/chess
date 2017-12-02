@@ -227,10 +227,12 @@ public class BoardPanel extends JPanel {
         else {
             movesUnderCheck = null;
         }
+        // checkmate
         if (playerInCheck && movesUnderCheck.size() == 0) {
             Packet lose = new PacketEnd(state.playerIsWhite() ? PacketEnd.EndResult.BLACK : PacketEnd.EndResult.WHITE);
             client.sendPacket(lose);
         }
+        // stalemate
         if (state.isDraw(state.playerIsWhite())) {
             Packet tie = new PacketEnd(PacketEnd.EndResult.STALEMATE);
             client.sendPacket(tie);
