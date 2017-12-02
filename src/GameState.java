@@ -157,7 +157,7 @@ public class GameState {
      * @param isWhite Which player's king to get.
      * @return The King.
      */
-    private King getKing(boolean isWhite) {
+    public King getKing(boolean isWhite) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (board[j][i] instanceof King) {
@@ -216,7 +216,7 @@ public class GameState {
         Piece temp = getPiece(loc);
         setPiece(loc, null);
         for (Piece p : getPiecesByColor(isWhite)) {
-            Set<Location> locs = p.getMovableLocations();
+            Set<Location> locs = p.getCapturableLocations();
             if (locs.contains(loc)) {
                 setPiece(loc, temp);
                 return true;

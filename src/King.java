@@ -8,7 +8,16 @@ public class King extends PieceFirstMove {
     }
 
     @Override
+    public Set<Location> getCapturableLocations() {
+        return getLocations(false);
+    }
+
+    @Override
     public Set<Location> getMovableLocations() {
+        return getLocations(true);
+    }
+
+    private Set<Location> getLocations(boolean includeCastling) {
         Set<Location> moves = new TreeSet<Location>();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
@@ -22,7 +31,7 @@ public class King extends PieceFirstMove {
             }
         }
         // castling
-        if (!movedBefore()) {
+        if (!movedBefore() && includeCastling) {
             List<Rook> rooks = gameState.getRooks(getIsWhite());
             for (Rook r : rooks) {
                 if (r.movedBefore()) {
@@ -33,10 +42,12 @@ public class King extends PieceFirstMove {
                 if (r.getLocation().getX() > getLocation().getX()) {
                     tmp = tmp.translate(1, 0);
                     while (!tmp.equals(r.getLocation())) {
+                        // can't castle with pieces blocking
                         if (gameState.isOccupied(tmp)) {
                             pieceBetween = true;
                             break;
                         }
+                        // can't castle in line of check
                         if (gameState.isProtected(tmp, !getIsWhite())) {
                             pieceBetween = true;
                             break;
@@ -50,10 +61,12 @@ public class King extends PieceFirstMove {
                 else {
                     tmp = tmp.translate(-1, 0);
                     while (!tmp.equals(r.getLocation())) {
+                        // can't castle with pieces blocking
                         if (gameState.isOccupied(tmp)) {
                             pieceBetween = true;
                             break;
                         }
+                        // can't castle in line of check
                         if (gameState.isProtected(tmp, !getIsWhite())) {
                             pieceBetween = true;
                             break;

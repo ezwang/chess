@@ -22,6 +22,16 @@ public abstract class Piece implements Comparable<Piece> {
     public abstract Set<Location> getMovableLocations();
 
     /**
+     * Get all the locations that a piece can move to and capture.
+     * This is almost the same as getMovableLocations, except the King cannot
+     * capture pieces through castling.
+     * @return A set of locations where this piece can move.
+     */
+    public Set<Location> getCapturableLocations() {
+        return getMovableLocations();
+    }
+
+    /**
      * Get all of the locations between this piece and the target piece.
      * Returns an empty set if the piece is not reachable, or if the piece
      * is not blockable. This method is used for check/checkmate checks.

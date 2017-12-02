@@ -1,7 +1,6 @@
 import static org.junit.Assert.*;
 
 import org.junit.*;
-import sun.reflect.generics.tree.Tree;
 
 import java.util.*;
 
@@ -236,5 +235,22 @@ public class GameTest {
 
         assertTrue(state.checkInCheck(true));
         assertEquals(0, state.getPossibleMovesUnderCheck(true).size());
+    }
+
+    @Test
+    public void testKingMovableLocations() {
+        state.move(new Location(4, 1), new Location(4, 3));
+        state.move(new Location(4, 6), new Location(4, 4));
+        state.move(new Location(5, 0), new Location(2, 3));
+        state.move(new Location(5, 7), new Location(2, 4));
+
+        Set<Location> expected = new TreeSet<Location>();
+        expected.add(new Location(4, 6));
+        expected.add(new Location(5, 7));
+        Set<Location> expected2 = new TreeSet<Location>();
+        expected2.add(new Location(5, 0));
+        expected2.add(new Location(4, 1));
+        assertEquals(expected, state.getKing(false).getMovableLocations());
+        assertEquals(expected2, state.getKing(true).getMovableLocations());
     }
 }
