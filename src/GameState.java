@@ -312,12 +312,14 @@ public class GameState {
                 if (from.getX() < to.getX()) {
                     Piece rook = this.getPiece(7, to.getY());
                     this.setPiece(7, to.getY(), null);
-                    this.setPiece(to.getX() - 1, to.getY(), rook);
+                    this.setPiece(to.translate(-1, 0), rook);
+                    rook.setLocation(to.translate(-1, 0));
                 }
                 else {
                     Piece rook = this.getPiece(0, to.getY());
                     this.setPiece(0, to.getY(), null);
-                    this.setPiece(to.getX() + 1, to.getY(), rook);
+                    this.setPiece(to.translate(1, 0), rook);
+                    rook.setLocation(to.translate(1, 0));
                 }
             }
             this.setPiece(to, p);

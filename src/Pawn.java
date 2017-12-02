@@ -20,10 +20,10 @@ public class Pawn extends Piece {
             if (gameState.onBoard(loc.getX(), loc.getY() + 1)) {
                 if (!gameState.isOccupied(loc.getX(), loc.getY() + 1)) {
                     moves.add(loc.translate(0, 1));
-                }
-                if (isInitial) {
-                    if (!gameState.isOccupied(loc.getX(), loc.getY() + 2)) {
-                        moves.add(loc.translate(0, 2));
+                    if (isInitial) {
+                        if (!gameState.isOccupied(loc.getX(), loc.getY() + 2)) {
+                            moves.add(loc.translate(0, 2));
+                        }
                     }
                 }
                 if (gameState.isDifferentColor(loc.getX() + 1, loc.getY() + 1, getIsWhite())) {
@@ -44,10 +44,10 @@ public class Pawn extends Piece {
             if (gameState.onBoard(loc.getX(), loc.getY() - 1)) {
                 if (!gameState.isOccupied(loc.getX(), loc.getY() - 1)) {
                     moves.add(loc.translate(0, -1));
-                }
-                if (isInitial) {
-                    if (!gameState.isOccupied(loc.getX(), loc.getY() - 2)) {
-                        moves.add(loc.translate(0, -2));
+                    if (isInitial) {
+                        if (!gameState.isOccupied(loc.getX(), loc.getY() - 2)) {
+                            moves.add(loc.translate(0, -2));
+                        }
                     }
                 }
                 if (gameState.isDifferentColor(loc.getX() + 1, loc.getY() - 1, getIsWhite())) {

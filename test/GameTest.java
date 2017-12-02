@@ -24,6 +24,19 @@ public class GameTest {
     }
 
     @Test
+    public void testPawnFirstMoveBlocked() {
+        state.setupEmptyBoard();
+
+        Pawn pawn = new Pawn(true, state, new Location(0, 1));
+        state.setPiece(pawn.getLocation(), pawn);
+        Rook rook = new Rook(true, state, new Location(0, 2));
+        state.setPiece(rook.getLocation(), rook);
+
+        Set<Location> expected = new TreeSet<Location>();
+        assertEquals(expected, pawn.getMovableLocations());
+    }
+
+    @Test
     public void testPawnAfterFirstMove() {
         Set<Location> expected = new TreeSet<Location>();
         expected.add(new Location(0, 3));
@@ -166,18 +179,54 @@ public class GameTest {
         state.move(kingLoc, c);
         assertEquals(king, state.getPiece(c));
         assertEquals(rook, state.getPiece(c.translate(1, 0)));
+
+        assertEquals(new Location(3, 0), rook.getLocation());
+        assertEquals(c, king.getLocation());
     }
 
     @Test
     public void testCastlingRight() {
         state.setupEmptyBoard();
         Location kingLoc = new Location(4, 0);
-        state.setPiece(kingLoc, new King(true, state, kingLoc));
+        King king = new King(true, state, kingLoc);
+        state.setPiece(kingLoc, king);
         Location rookLoc = new Location(7, 0);
-        state.setPiece(rookLoc, new Rook(true, state, rookLoc));
+        Rook rook = new Rook(true, state, rookLoc);
+        state.setPiece(rookLoc, rook);
 
         Location c = new Location(6, 0);
         assertTrue(state.getPiece(kingLoc).getMovableLocations().contains(c));
+
+        state.move(kingLoc, c);
+
+        assertEquals(king, state.getPiece(c));
+        assertEquals(rook, state.getPiece(c.translate(-1, 0)));
+
+        assertEquals(new Location(5, 0), rook.getLocation());
+        assertEquals(c, king.getLocation());
+    }
+
+    @Test
+    public void testRookMoveAfterCastling() {
+        state.setupEmptyBoard();
+        Location kingLoc = new Location(4, 0);
+        state.setPiece(kingLoc, new King(true, state, kingLoc));
+        Location rookLoc = new Location(7, 0);
+        Rook rook = new Rook(true, state, rookLoc);
+        state.setPiece(rookLoc, rook);
+
+        Pawn p = new Pawn(true, state, new Location(5, 1));
+        state.setPiece(p.getLocation(), p);
+
+        Queen q = new Queen(true, state, new Location(3, 0));
+        state.setPiece(q.getLocation(), q);
+
+        Location c = new Location(6, 0);
+        state.move(kingLoc, c);
+
+        TreeSet<Location> expected = new TreeSet<Location>();
+        expected.add(new Location(4, 0));
+        assertEquals(expected, rook.getMovableLocations());
     }
 
     @Test
