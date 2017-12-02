@@ -1,7 +1,7 @@
 import java.util.Set;
 import java.util.TreeSet;
 
-public class Pawn extends Piece {
+public class Pawn extends Piece implements PieceCaptureCondition {
     public Pawn(boolean isWhite, GameState state, Location loc) {
         super(isWhite, state, loc);
     }

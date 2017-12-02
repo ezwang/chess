@@ -2,7 +2,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class King extends PieceFirstMove {
+public class King extends PieceFirstMove implements PieceCaptureCondition {
     public King(boolean isWhite, GameState state, Location loc) {
         super(isWhite, state, loc);
     }
@@ -10,6 +10,28 @@ public class King extends PieceFirstMove {
     @Override
     public Set<Location> getCapturableLocations() {
         return getLocations(false);
+    }
+
+    /**
+     * This special case is required, since kings cannot capture
+     * locations that would leave them open to capture. However,
+     * they could potentially capture these locations.
+     * @return A set of potentially capturable locations.
+     */
+    public Set<Location> getPotentialCapturableLocations() {
+        Set<Location> moves = new TreeSet<Location>();
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                if (i == 0 && j == 0) {
+                    continue;
+                }
+                Location n = getLocation().translate(i, j);
+                if (gameState.onBoard(n) && !gameState.isSameColor(n, getIsWhite())) {
+                    moves.add(n);
+                }
+            }
+        }
+        return moves;
     }
 
     @Override
