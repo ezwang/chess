@@ -542,9 +542,50 @@ public class GameTest {
         King black = new King(false, state, new Location(0, 2));
         state.setPiece(black.getLocation(), black);
 
-        Location both = new Location(0, 1);
-        assertFalse(white.getMovableLocations().contains(both));
-        assertFalse(black.getMovableLocations().contains(both));
+        Set<Location> expected = new TreeSet<Location>();
+        expected.add(new Location(1, 0));
+        Set<Location> expected2 = new TreeSet<Location>();
+        expected2.add(new Location(1, 2));
+        expected2.add(new Location(0, 3));
+        expected2.add(new Location(1, 3));
+
+        assertEquals(expected, white.getMovableLocations());
+        assertEquals(expected2, black.getMovableLocations());
+    }
+
+    @Test
+    public void testKingMovableLocationsEachOtherDiagonal() {
+        state.setupEmptyBoard();
+
+        King white = new King(true, state, new Location(3, 3));
+        state.setPiece(white.getLocation(), white);
+
+        King black = new King(false, state, new Location(5, 5));
+        state.setPiece(black.getLocation(), black);
+
+        assertFalse(white.getMovableLocations().contains(new Location(4, 4)));
+        assertFalse(black.getMovableLocations().contains(new Location(4, 4)));
+    }
+
+    @Test
+    public void testKingMovableLocationsEachOtherMiddle() {
+        state.setupEmptyBoard();
+
+        King white = new King(true, state, new Location(5, 3));
+        state.setPiece(white.getLocation(), white);
+
+        King black = new King(false, state, new Location(5, 5));
+        state.setPiece(black.getLocation(), black);
+
+        Set<Location> bad = new TreeSet<Location>();
+        bad.add(new Location(4, 4));
+        bad.add(new Location(5, 4));
+        bad.add(new Location(6, 4));
+
+        for (Location b : bad) {
+            assertFalse(white.getMovableLocations().contains(b));
+            assertFalse(black.getMovableLocations().contains(b));
+        }
     }
 
     @Test
