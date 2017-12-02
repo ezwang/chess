@@ -89,12 +89,6 @@ PennKey: ezwang
     I would have used an enum to represent white/black instead of a boolean. This
     would make the code easier to read and reduce confusion about method arguments.
 
-    I would have tried to avoid duplication of location between the Piece class and
-    the GameState class. This is difficult because in some cases I need to get location
-    from the piece and in other cases I need to get piece from location. This could
-    have been done better by making one setter method that set the location in both
-    the piece and the game state.
-
 ========================
 =: External Resources :=
 ========================

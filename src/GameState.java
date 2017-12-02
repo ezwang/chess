@@ -131,6 +131,9 @@ public class GameState {
 
     public void setPiece(int x, int y, Piece p) {
         if (x >= 0 && y >= 0 && x < 8 && y < 8) {
+            if (p != null) {
+                p.setLocation(new Location(x, y));
+            }
             board[y][x] = p;
         }
         else {
@@ -335,17 +338,14 @@ public class GameState {
                     Piece rook = this.getPiece(7, to.getY());
                     this.setPiece(7, to.getY(), null);
                     this.setPiece(to.translate(-1, 0), rook);
-                    rook.setLocation(to.translate(-1, 0));
                 }
                 else {
                     Piece rook = this.getPiece(0, to.getY());
                     this.setPiece(0, to.getY(), null);
                     this.setPiece(to.translate(1, 0), rook);
-                    rook.setLocation(to.translate(1, 0));
                 }
             }
             this.setPiece(to, p);
-            p.setLocation(to);
         }
         // pawn promotion
         else {
@@ -384,7 +384,6 @@ public class GameState {
         Location to = m.getTo();
         Piece p = m.getNewPiece();
         Piece op = m.getOriginalPiece();
-        p.setLocation(from);
         this.setPiece(from, p);
         // en passant
         if (op instanceof Pawn && !op.getLocation().equals(to)) {
@@ -397,13 +396,11 @@ public class GameState {
                 Piece rook = this.getPiece(to.getX() - 1, to.getY());
                 this.setPiece(7, to.getY(), rook);
                 this.setPiece(to.getX() - 1, to.getY(), null);
-                rook.setLocation(new Location(7, to.getY()));
             }
             else {
                 Piece rook = this.getPiece(to.getX() + 1, to.getY());
                 this.setPiece(0, to.getY(), rook);
                 this.setPiece(to.getX() + 1, to.getY(), null);
-                rook.setLocation(new Location(0, to.getY()));
             }
             this.setPiece(to, null);
         }
