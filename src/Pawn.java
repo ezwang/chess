@@ -7,12 +7,40 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public Set<Location> getMovableLocations() {
+    public Set<Location> getCapturableLocations() {
         Set<Location> moves = new TreeSet<Location>();
-        boolean isInitial = false;
         // check en passant
         Move m = gameState.getLastMove();
         boolean canEnPassant = movedTwoSteps(m) && nextTo(m.getTo(), loc);
+        if (getIsWhite()) {
+            if (gameState.isDifferentColor(loc.getX() + 1, loc.getY() + 1, getIsWhite())) {
+                moves.add(loc.translate(1, 1));
+            }
+            if (gameState.isDifferentColor(loc.getX() - 1, loc.getY() + 1, getIsWhite())) {
+                moves.add(loc.translate(-1, 1));
+            }
+            if (canEnPassant) {
+                moves.add(loc.translate(m.getTo().getX() - loc.getX(), 1));
+            }
+        }
+        else {
+            if (gameState.isDifferentColor(loc.getX() + 1, loc.getY() - 1, getIsWhite())) {
+                moves.add(loc.translate(1, -1));
+            }
+            if (gameState.isDifferentColor(loc.getX() - 1, loc.getY() - 1, getIsWhite())) {
+                moves.add(loc.translate(-1, -1));
+            }
+            if (canEnPassant) {
+                moves.add(loc.translate(m.getTo().getX() - loc.getX(), -1));
+            }
+        }
+        return moves;
+    }
+
+    @Override
+    public Set<Location> getMovableLocations() {
+        Set<Location> moves = new TreeSet<Location>();
+        boolean isInitial = false;
         if (getIsWhite()) {
             if (loc.getY() == 1) {
                 isInitial = true;
@@ -26,15 +54,6 @@ public class Pawn extends Piece {
                         }
                     }
                 }
-                if (gameState.isDifferentColor(loc.getX() + 1, loc.getY() + 1, getIsWhite())) {
-                    moves.add(loc.translate(1, 1));
-                }
-                if (gameState.isDifferentColor(loc.getX() - 1, loc.getY() + 1, getIsWhite())) {
-                    moves.add(loc.translate(-1, 1));
-                }
-            }
-            if (canEnPassant) {
-                moves.add(loc.translate(m.getTo().getX() - loc.getX(), 1));
             }
         }
         else {
@@ -50,17 +69,9 @@ public class Pawn extends Piece {
                         }
                     }
                 }
-                if (gameState.isDifferentColor(loc.getX() + 1, loc.getY() - 1, getIsWhite())) {
-                    moves.add(loc.translate(1, -1));
-                }
-                if (gameState.isDifferentColor(loc.getX() - 1, loc.getY() - 1, getIsWhite())) {
-                    moves.add(loc.translate(-1, -1));
-                }
-            }
-            if (canEnPassant) {
-                moves.add(loc.translate(m.getTo().getX() - loc.getX(), -1));
             }
         }
+        moves.addAll(getCapturableLocations());
         return moves;
     }
 
