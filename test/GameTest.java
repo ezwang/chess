@@ -68,6 +68,18 @@ public class GameTest {
     }
 
     @Test
+    public void testEnPassantAfterMove() {
+        state.setupEmptyBoard();
+
+        Pawn enemyPawn = new Pawn(false, state, new Location(0, 4));
+        state.setPiece(enemyPawn.getLocation(), enemyPawn);
+        Pawn friendlyPawn = new Pawn(true, state, new Location(1,4));
+        state.setPiece(friendlyPawn.getLocation(), friendlyPawn);
+
+        assertFalse(friendlyPawn.getMovableLocations().contains(new Location(0, 5)));
+    }
+
+    @Test
     public void testKnightMove() {
         Set<Location> expected = new TreeSet<Location>();
         expected.add(new Location(0, 2));
