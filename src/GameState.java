@@ -239,6 +239,20 @@ public class GameState {
     }
 
     /**
+     * Check if a location can be captured in one turn, ignoring a specified piece.
+     * @param loc The location to check.
+     * @param isWhite If protected by white or black.
+     * @param p The piece to ignore.
+     * @return Whether this location is protected.
+     */
+    public boolean isProtectedThroughPiece(Location loc, boolean isWhite, Piece p) {
+        setPiece(p.getLocation(), null);
+        boolean prot = isProtected(loc, isWhite);
+        setPiece(p.getLocation(), p);
+        return prot;
+    }
+
+    /**
      * Return all possible moves that can escape check. If the set is empty,
      * then the game is over (checkmate).
      * @param isWhite Which player to use.
@@ -264,7 +278,7 @@ public class GameState {
         }
         // case where you can run away
         for (Location route : routes) {
-            if (isDifferentColor(route, isWhite) && isProtected(route, !isWhite)) {
+            if (isProtectedThroughPiece(route, !isWhite, king)) {
                 continue;
             }
             out.add(new Move(curr, route));

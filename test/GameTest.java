@@ -279,6 +279,21 @@ public class GameTest {
     }
 
     @Test
+    public void testDoubleRookMate() {
+        state.setupEmptyBoard();
+        King king = new King(true, state, new Location(3, 0));
+        state.setPiece(king.getLocation(), king);
+
+        Rook rook1 = new Rook(false, state, new Location(7, 0));
+        state.setPiece(rook1.getLocation(), rook1);
+        Rook rook2 = new Rook(false, state, new Location(7, 1));
+        state.setPiece(rook2.getLocation(), rook2);
+
+        assertTrue(state.checkInCheck(true));
+        assertEquals(new TreeSet<Location>(), state.getPossibleMovesUnderCheck(true));
+    }
+
+    @Test
     public void testCheckKingCapture() {
         state.setupEmptyBoard();
         King king = new King(false, state, new Location(0, 0));
