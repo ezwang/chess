@@ -111,4 +111,25 @@ public class Pawn extends Piece {
     public String getNotationSymbol() {
         return "p";
     }
+
+    /**
+     * Get a set of locations that the pawn could potentially capture.
+     * This is unique to pawns, since pawns have special moves that are
+     * only available if an enemy piece exists, while other pieces
+     * can move to a square regardless of if an enemy piece exists or if
+     * the location is empty.
+     * @return A set of potentially capturable locations.
+     */
+    public Set<Location> getPotentialCapturableLocations() {
+        Set<Location> moves = new TreeSet<Location>();
+        if (getIsWhite()) {
+            moves.add(loc.translate(1, 1));
+            moves.add(loc.translate(-1, 1));
+        }
+        else {
+            moves.add(loc.translate(1, -1));
+            moves.add(loc.translate(-1, -1));
+        }
+        return moves;
+    }
 }

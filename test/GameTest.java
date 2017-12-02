@@ -531,4 +531,35 @@ public class GameTest {
         assertEquals(expected, state.getKing(false).getMovableLocations());
         assertEquals(expected2, state.getKing(true).getMovableLocations());
     }
+
+    @Test
+    public void testKingMovableLocationsEachOther() {
+        state.setupEmptyBoard();
+
+        King white = new King(true, state, new Location(0, 0));
+        state.setPiece(white.getLocation(), white);
+
+        King black = new King(false, state, new Location(0, 2));
+        state.setPiece(black.getLocation(), black);
+
+        Location both = new Location(0, 1);
+        assertFalse(white.getMovableLocations().contains(both));
+        assertFalse(black.getMovableLocations().contains(both));
+    }
+
+    @Test
+    public void testKingMovableLocationsPawn() {
+        state.setupEmptyBoard();
+
+        King white = new King(true, state, new Location(0, 0));
+        state.setPiece(white.getLocation(), white);
+
+        Pawn black = new Pawn(false, state, new Location(1, 2));
+        state.setPiece(black.getLocation(), black);
+
+        Location invalid = new Location(0, 1);
+
+        assertTrue(state.isProtected(invalid, false));
+        assertFalse(white.getMovableLocations().contains(invalid));
+    }
 }

@@ -228,7 +228,13 @@ public class GameState {
         Piece temp = getPiece(loc);
         setPiece(loc, null);
         for (Piece p : getPiecesByColor(isWhite)) {
-            Set<Location> locs = p.getCapturableLocations();
+            Set<Location> locs;
+            if (p instanceof Pawn) {
+                locs = ((Pawn) p).getPotentialCapturableLocations();
+            }
+            else {
+                locs = p.getCapturableLocations();
+            }
             if (locs.contains(loc)) {
                 setPiece(loc, temp);
                 return true;
