@@ -91,7 +91,7 @@ public class InfoPanel extends JPanel {
         endButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                Packet p = new PacketEnd(!state.playerIsWhite());
+                Packet p = new PacketEnd(state.playerIsWhite() ? PacketEnd.EndResult.BLACK : PacketEnd.EndResult.WHITE);
                 c.sendPacket(p);
             }
         });

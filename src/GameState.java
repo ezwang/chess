@@ -253,6 +253,26 @@ public class GameState {
     }
 
     /**
+     * Check common conditions to check for a stalemate.
+     * @param side The side to check for a stalemate.
+     * @return Whether the game is a stalemate or not.
+     */
+    public boolean isDraw(boolean side) {
+        Set<Piece> pieces = getPiecesByColor(side);
+        if (pieces.size() == 1) {
+            if (getPiecesByColor(!side).size() == 1) {
+                return true;
+            }
+        }
+        for (Piece piece : pieces) {
+            if (piece.getMovableLocations().size() > 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Return all possible moves that can escape check. If the set is empty,
      * then the game is over (checkmate).
      * @param isWhite Which player to use.

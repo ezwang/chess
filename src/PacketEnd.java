@@ -1,24 +1,33 @@
 import java.io.IOException;
 
 public class PacketEnd implements Packet {
-    private boolean winner;
-    private String message;
-
-    public PacketEnd(boolean winner) {
-        this.winner = winner;
+    public enum EndResult {
+        WHITE,
+        BLACK,
+        STALEMATE,
+        DRAW
     }
 
-    public PacketEnd(String message) {
-        this.message = message;
+    private EndResult state;
+
+    public PacketEnd(EndResult state) {
+        this.state = state;
     }
 
     @Override
     public void processClient(ClientConnection c) {
-        if (message != null) {
-            c.endGame(message);
-        }
-        else {
-            c.endGame((winner ? "White" : "Black") + " Wins!");
+        switch (state) {
+            case WHITE:
+                c.endGame("White wins!");
+                break;
+            case BLACK:
+                c.endGame("Black wins!");
+                break;
+            case STALEMATE:
+                c.endGame("Stalemate!");
+                break;
+            case DRAW:
+                c.endGame("Draw!");
         }
     }
 

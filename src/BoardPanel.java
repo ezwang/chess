@@ -228,8 +228,12 @@ public class BoardPanel extends JPanel {
             movesUnderCheck = null;
         }
         if (playerInCheck && movesUnderCheck.size() == 0) {
-            Packet lose = new PacketEnd(!state.playerIsWhite());
+            Packet lose = new PacketEnd(state.playerIsWhite() ? PacketEnd.EndResult.BLACK : PacketEnd.EndResult.WHITE);
             client.sendPacket(lose);
+        }
+        if (state.isDraw(state.playerIsWhite())) {
+            Packet tie = new PacketEnd(PacketEnd.EndResult.STALEMATE);
+            client.sendPacket(tie);
         }
         this.repaint();
     }

@@ -14,7 +14,7 @@ public class PacketDraw implements Packet {
             c.sendPacket(notify);
             c.getOpponent().sendPacket(notify);
 
-            Packet p = new PacketEnd("Tie!");
+            Packet p = new PacketEnd(PacketEnd.EndResult.DRAW);
             c.sendPacket(p);
             c.getOpponent().sendPacket(p);
         }
