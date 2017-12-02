@@ -39,6 +39,10 @@ public class King extends PieceFirstMove {
                 }
                 boolean pieceBetween = false;
                 Location tmp = loc;
+                // if under check, can't castle
+                if (gameState.isProtected(tmp, !getIsWhite())) {
+                    pieceBetween = true;
+                }
                 if (r.getLocation().getX() > getLocation().getX()) {
                     tmp = tmp.translate(1, 0);
                     while (!tmp.equals(r.getLocation())) {

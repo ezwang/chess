@@ -276,6 +276,22 @@ public class GameTest {
     }
 
     @Test
+    public void testCastlingUnderCheck() {
+        state.setupEmptyBoard();
+        Location kingLoc = new Location(4, 0);
+        state.setPiece(kingLoc, new King(true, state, kingLoc));
+        Location rookLoc = new Location(0, 0);
+        state.setPiece(rookLoc, new Rook(true, state, rookLoc));
+
+        Location enemyRookLoc = new Location(4, 5);
+        state.setPiece(enemyRookLoc, new Rook(false, state, enemyRookLoc));
+
+        Location c = new Location(2, 0);
+        assertTrue(state.isProtected(kingLoc, false));
+        assertFalse(state.getPiece(kingLoc).getMovableLocations().contains(c));
+    }
+
+    @Test
     public void testFourMoveCheckmate() {
         state.move(new Location(5, 1), new Location(5, 2));
         state.move(new Location(4, 6), new Location(4, 4));
