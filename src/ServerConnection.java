@@ -1,6 +1,3 @@
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.net.*;
 import java.io.*;
 
@@ -15,7 +12,6 @@ public class ServerConnection implements Runnable {
     private DataOutputStream out;
 
     private String nickname;
-    private Gson gson;
 
     private boolean draw;
     private boolean undo;
@@ -24,8 +20,6 @@ public class ServerConnection implements Runnable {
     public ServerConnection(Server server, Socket sock) throws IOException {
         this.server = server;
         this.socket = sock;
-
-        gson = new GsonBuilder().create();
 
         out = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
     }
@@ -54,7 +48,7 @@ public class ServerConnection implements Runnable {
                     break;
                 }
                 try {
-                    Packet p = (Packet) gson.fromJson(packet, Class.forName(type));
+                    Packet p = PacketUtils.decode(packet);
                     p.processServer(this);
                 } catch (ClassNotFoundException | ClassCastException ex) {
                     // this should never happen
@@ -75,7 +69,7 @@ public class ServerConnection implements Runnable {
      */
     public void sendPacket(Packet p) throws IOException {
         out.writeUTF(p.getClass().getName());
-        out.writeUTF(gson.toJson(p));
+        out.writeUTF(PacketUtils.encode(p));
         out.flush();
     }
 

@@ -1,9 +1,11 @@
+import java.io.Serializable;
+
 /**
  * Represents a move. Contains information about the piece that was
  * originally where the piece will move to in case of captures. Contains
  * information about what piece was moved in the case of pawn promotion.
  */
-public class Move implements Comparable<Move> {
+public class Move implements Comparable<Move>, Serializable {
     private final Location from, to;
     private final Piece originalPiece, newPiece;
     private final boolean pawnPromotion;

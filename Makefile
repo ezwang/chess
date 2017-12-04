@@ -1,5 +1,5 @@
 # ADD JAR FILES TO THE FOLLOWING LINE, SEPARATED BY ':' (NO WHITESPACE)
-JARS := gson-2.6.2.jar:junit-4.10.jar
+JARS := junit-4.10.jar
 
 # DO NOT EDIT BELOW HERE
 SUBMIT  := $(wildcard src/*.java test/*.java files/* *.jar Makefile README.txt)

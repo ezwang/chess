@@ -1,6 +1,3 @@
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.io.*;
 import java.net.*;
 
@@ -10,7 +7,6 @@ import java.net.*;
 public class ClientConnection implements Runnable {
     private String addr, nick;
     private Thread thread;
-    private Gson gson;
 
     private Game game;
     private GamePanel gui;
@@ -24,8 +20,6 @@ public class ClientConnection implements Runnable {
         this.addr = addr;
         this.nick = nick;
         this.game = game;
-
-        gson = new GsonBuilder().create();
     }
 
     /**
@@ -37,7 +31,7 @@ public class ClientConnection implements Runnable {
         if (socket.isConnected()) {
             try {
                 out.writeUTF(p.getClass().getName());
-                out.writeUTF(gson.toJson(p));
+                out.writeUTF(PacketUtils.encode(p));
                 out.flush();
             }
             catch (IOException ex) {
@@ -88,7 +82,7 @@ public class ClientConnection implements Runnable {
                 String type = in.readUTF();
                 String packet = in.readUTF();
                 try {
-                    Packet p = (Packet)gson.fromJson(packet, Class.forName(type));
+                    Packet p = PacketUtils.decode(packet);
                     p.processClient(this);
                 }
                 catch (ClassNotFoundException | ClassCastException ex) {

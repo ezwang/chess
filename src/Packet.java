@@ -1,9 +1,10 @@
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Represents a packet used in communication between the client and the server.
  */
-public interface Packet {
+public interface Packet extends Serializable {
     /**
      * The code executed by the client to handle this event.
      * @throws UnsupportedOperationException This happens if this packet does

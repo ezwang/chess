@@ -1,8 +1,10 @@
+import java.io.Serializable;
+
 /**
  * Represents a location on the chessboard. Does not have to be a real
  * location (ex: could have negative values).
  */
-public class Location implements Comparable<Location> {
+public class Location implements Comparable<Location>, Serializable {
     private int x;
     private int y;
 
