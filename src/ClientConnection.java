@@ -30,7 +30,6 @@ public class ClientConnection implements Runnable {
     public void sendPacket(Packet p) {
         if (socket.isConnected()) {
             try {
-                out.writeUTF(p.getClass().getName());
                 out.writeUTF(PacketUtils.encode(p));
                 out.flush();
             }
@@ -79,7 +78,6 @@ public class ClientConnection implements Runnable {
         try {
             DataInputStream in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
             while (true) {
-                String type = in.readUTF();
                 String packet = in.readUTF();
                 try {
                     Packet p = PacketUtils.decode(packet);

@@ -32,9 +32,8 @@ public class ServerConnection implements Runnable {
             DataInputStream in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 
             while (true) {
-                String type, packet;
+                String packet;
                 try {
-                    type = in.readUTF();
                     packet = in.readUTF();
                 }
                 catch (EOFException | SocketException ex) {
@@ -68,7 +67,6 @@ public class ServerConnection implements Runnable {
      * @throws IOException
      */
     public void sendPacket(Packet p) throws IOException {
-        out.writeUTF(p.getClass().getName());
         out.writeUTF(PacketUtils.encode(p));
         out.flush();
     }
