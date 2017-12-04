@@ -13,17 +13,31 @@ PennKey: ezwang
 
   1. 2-D Arrays
         Used to represent the chessboard. Chess moves are reflected as index
-        changes in the array.
+        changes in the array. This is an appropriate data structure since the
+        size of the array never changes, and looking up which piece is on a particular
+        square is an easy to do operation.
 
   2. Collections
         Used in various places, such as to indicate a collection of moves (TreeSet)
-        or to keep track of the history of the game (LinkedList).
+        or to keep track of the history of the game (LinkedList). Particularly good
+        for storing moves and locations, since checking if a move exists in a set
+        and modifying sets are pretty frequently used operations. TreeSet is a good
+        data structure for these requirements since it has O(log n) insert and O(log n)
+        lookup.
 
   3. Inheritance/Subtyping Dynamic Dispatch
-        Used for Packets and Pieces.
+        Used for Packets and Pieces. When the server and client receive packets, they
+        can rely on dynamic dispatch to perform the intended behavior for the packet,
+        instead of doing a lot of casework. This is an appropriate use for representing
+        chess pieces, since pieces have similar operations (ex: get all possible squares
+        that this piece can move to) but different results depending on the type of
+        the piece.
 
   4. Networking I/O
-        Used for the multiplayer aspect of the game.
+        Used for the multiplayer aspect of the game. Consists of a client server model,
+        with the server doing matchmaking and passing data between 2 clients that are
+        in a game. Implementing networking allows users to play the game when
+        they are on different computers and when they are far away in real life.
 
 
 =========================
@@ -61,7 +75,11 @@ PennKey: ezwang
             Knight
             Rook
             Pawn
-
+        PieceCaptureCondition: Represents a piece that has special conditions for
+                               capturing (used by king (cannot capture protected piece)
+                               and pawn (can only capture diagonally)).
+        PieceFirstMove: Keeps track of number of times a piece moved. Necessary for
+                        castling (used by king and rook).
 
 - Were there any significant stumbling blocks while you were implementing your
   game (related to your design, or otherwise)?
@@ -84,7 +102,8 @@ PennKey: ezwang
     that should be hidden. This is because "private" does not allow classes that
     extend the current class to access variables. I use the "protected" keyword,
     but this acts pretty much the same as "public" since the project is not in
-    a package.
+    a package. If it was allowed to separate the components into different packages,
+    then the protected keyword would work as intended.
 
     I would have used an enum to represent white/black instead of a boolean. This
     would make the code easier to read and reduce confusion about method arguments.
