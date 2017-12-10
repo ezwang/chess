@@ -24,6 +24,11 @@ public class BoardPanel extends JPanel {
 
     private Map<String, Image> images;
 
+    /**
+     * Instantiates a new game board component.
+     * @param state The state of the game.
+     * @param client The client used to communicate with the opponent.
+     */
     public BoardPanel(GameState state, ClientConnection client) {
         this.state = state;
         this.client = client;
@@ -139,6 +144,7 @@ public class BoardPanel extends JPanel {
 
     /**
      * Generate a placeholder image for missing images.
+     * Consists of a colored letter representing the piece.
      * @param color The color of the piece.
      * @param piece The piece.
      * @return The placeholder image.
