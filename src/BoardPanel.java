@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -124,10 +125,26 @@ public class BoardPanel extends JPanel {
                 }
                 catch (IOException ex) {
                     // this shouldn't happen unless the images are missing
-                    ex.printStackTrace();
+                    Image img = getPlaceholderImage(c, p);
+                    images.put(p + c, img);
                 }
             }
         }
+    }
+
+    /**
+     * Generate a placeholder image for missing images.
+     * @param color The color of the piece.
+     * @param piece The piece.
+     * @return The placeholder image.
+     */
+    private Image getPlaceholderImage(String color, String piece) {
+        BufferedImage img = new BufferedImage(SQUARE_SIZE, SQUARE_SIZE, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D graphics = img.createGraphics();
+        graphics.setColor(color.equals("l") ? Color.WHITE : Color.BLACK);
+        graphics.setFont(new Font("Lucidia", Font.BOLD, 30));
+        graphics.drawString(piece.toUpperCase(), 15, 40);
+        return img;
     }
 
     @Override
