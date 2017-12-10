@@ -1,6 +1,9 @@
 import java.io.*;
 import java.util.Base64;
 
+/**
+ * Used to convert Java classes to strings and vice versa.
+ */
 public class PacketUtils {
     public static String encode(Packet p) throws IOException {
         ByteArrayOutputStream bs = new ByteArrayOutputStream();
