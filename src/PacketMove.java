@@ -35,6 +35,11 @@ public class PacketMove implements Packet {
         state.move(old, now, transform);
 
         c.getGUI().addMove(new Move(old, now));
+
+        if (this.transform != null) {
+            c.addChat("Pawn was promoted into a " + this.transform + "!");
+        }
+
         c.update();
     }
 
