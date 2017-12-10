@@ -57,8 +57,8 @@ public class ServerConnection implements Runnable {
         }
         catch (IOException e) {
             // print the exception to the console
-            // this is probably a network error, ignore the invalid packet
-            // and hope that it doesn't break the game
+            // this is probably a network error, ignore the invalid packet and
+            // hope that it doesn't break the game
             e.printStackTrace();
         }
     }
