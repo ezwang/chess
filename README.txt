@@ -15,7 +15,7 @@ PennKey: ezwang
         Used to represent the chessboard. Chess moves are reflected as index
         changes in the array. This is an appropriate data structure since the
         size of the array never changes, and looking up which piece is on a particular
-        square is an easy to do operation.
+        square is an O(1) operation.
 
   2. Collections
         Used in various places, such as to indicate a collection of moves (TreeSet)
@@ -89,6 +89,9 @@ PennKey: ezwang
     There were a lot of special cases for castling/en passant. Adding unit tests
     helped to catch most of them.
 
+    There were also a lot of difficulties finding all of the valid moves, since
+    there are a lot of different cases. Adding unit tests helped with this process.
+
 - Evaluate your design. Is there a good separation of functionality? How well is
   private state encapsulated? What would you refactor, if given the chance?
 
@@ -96,11 +99,16 @@ PennKey: ezwang
     game state, and the GUI grouped in separate classes. It is possible to create
     an isolated game state for unit testing purposes.
 
+    The shared code between the server and the client makes the development process
+    easier, since the data is stored in the same way on both ends. Currently server
+    side validation (checking if moves are valid before broadcasting them to the
+    other client) is not implemented, but could easily be implemented if necessary.
+
     Private state is encapsulated quite well, but there are still exposed variables
     that should be hidden. This is because "private" does not allow classes that
     extend the current class to access variables. I use the "protected" keyword,
     but this acts pretty much the same as "public" since the project is not in
-    a package. If it was allowed to separate the components into different packages,
+    a package. If I was allowed to separate the components into different packages,
     then the protected keyword would work as intended.
 
     I would have used an enum to represent white/black instead of a boolean. This
