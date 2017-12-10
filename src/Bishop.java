@@ -1,7 +1,12 @@
 import java.util.Set;
 
 public class Bishop extends Piece {
-    private static final Location[] DIRECTIONS = new Location[] { new Location(1, 1), new Location(-1, 1), new Location(-1, -1), new Location(1, -1) };
+    private static final Location[] DIRECTIONS = new Location[] {
+        new Location(1, 1),
+        new Location(-1, 1),
+        new Location(-1, -1),
+        new Location(1, -1)
+    };
 
     public Bishop(boolean isWhite, GameState state, Location loc) {
         super(isWhite, state, loc);

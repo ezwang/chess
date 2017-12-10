@@ -34,7 +34,9 @@ public class ClientConnection implements Runnable {
                 out.flush();
             }
             catch (IOException ex) {
-                // TODO: handle exception
+                // print out the error to the console
+                // this is probably a network error, ignore the error and hope
+                // that it doesn't break the game
                 ex.printStackTrace();
             }
         }
@@ -92,7 +94,9 @@ public class ClientConnection implements Runnable {
         catch (IOException ex) {
             // ignore the error that comes from reading a closed socket
             if (!socket.isConnected()) {
-                // TODO: handle exception
+                // print out an error message to the console
+                // probably a network error, ignore the invalid packet and hope
+                // that it doesn't break the game
                 ex.printStackTrace();
             }
         }

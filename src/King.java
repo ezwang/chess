@@ -13,9 +13,9 @@ public class King extends PieceFirstMove implements PieceCaptureCondition {
     }
 
     /**
-     * This special case is required, since kings cannot capture
-     * locations that would leave them open to capture. However,
-     * they could potentially capture these locations.
+     * This special case is required, since kings cannot capture locations that
+     * would leave them open to capture. However, they could potentially capture
+     * these locations.
      * @return A set of potentially capturable locations.
      */
     public Set<Location> getPotentialCapturableLocations() {

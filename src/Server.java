@@ -51,7 +51,9 @@ public class Server implements Runnable {
                     // server has been stopped
                     return;
                 }
-                // TODO: handle exception
+                // print out the error to the console
+                // this is probably a network error, ignore the error and hope
+                // that it doesn't break the game
                 e.printStackTrace();
             }
         }
