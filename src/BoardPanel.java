@@ -45,58 +45,11 @@ public class BoardPanel extends JPanel {
                 int x = (mouseEvent.getX() - BORDER_WIDTH) / SQUARE_SIZE;
                 int y = (mouseEvent.getY() - BORDER_WIDTH) / SQUARE_SIZE;
 
-                Piece op = null;
-                if (selected != null) {
-                    op = state.getPiece(selected);
-                }
                 Piece p = state.getPiece(x, state.playerIsWhite() ? 7-y : y);
                 Location mv = new Location(x, state.playerIsWhite() ? 7-y : y);
 
                 if (selected != null) {
-                    // deselect pieces if they are clicked when selected
-                    if (selected.equals(mv)) {
-                        selected = null;
-                        allowed = null;
-                    }
-                    else if (allowed != null && allowed.contains(mv)) {
-                        if (playerInCheck) {
-                            Move m = new Move(selected, mv);
-                            if (!movesUnderCheck.contains(m)) {
-                                client.addChat("You cannot make that move because you are in check!");
-                                client.addChat("Valid Moves: " + movesUnderCheck.toString());
-                                return;
-                            }
-                        }
-
-                        // check if moving would put player in check
-                        state.move(selected, mv);
-                        boolean nowInCheck = state.checkInCheck(state.playerIsWhite());
-                        state.undo();
-
-                        if (nowInCheck) {
-                            client.addChat("Performing that move would put you in check!");
-                            return;
-                        }
-
-                        Packet movePacket;
-                        // this case handles pawn promotion
-                        if (op instanceof Pawn && (mv.getY() == 0 || mv.getY() == 7)) {
-                            String[] values = new String[] { "Queen", "Rook", "Bishop", "Knight" };
-                            Object result = JOptionPane.showInputDialog(null, "What should this pawn be promoted into?","Piece Promotion", JOptionPane.DEFAULT_OPTION, null, values, 0);
-                            if (result == null) {
-                                // user canceled the selection, cancel the move
-                                return;
-                            }
-                            String res = result.toString();
-                            movePacket = new PacketMove(selected, mv, res);
-                        }
-                        else {
-                            movePacket = new PacketMove(selected, mv);
-                        }
-                        client.sendPacket(movePacket);
-                        selected = null;
-                        allowed = null;
-                    }
+                    performMove(mv);
                 }
                 else if (p != null) {
                     // if the piece is not the same color as the player
@@ -111,6 +64,58 @@ public class BoardPanel extends JPanel {
                 t.repaint();
             }
         });
+    }
+
+    /**
+     * Performs a piece move and updates the GUI. Relies on the select variable.
+     * @param mv The location to move to.
+     */
+    private void performMove(Location mv) {
+        // deselect pieces if they are clicked when selected
+        if (selected.equals(mv)) {
+            selected = null;
+            allowed = null;
+        }
+        else if (allowed != null && allowed.contains(mv)) {
+            if (playerInCheck) {
+                Move m = new Move(selected, mv);
+                if (!movesUnderCheck.contains(m)) {
+                    client.addChat("You cannot make that move because you are in check!");
+                    client.addChat("Valid Moves: " + movesUnderCheck.toString());
+                    return;
+                }
+            }
+
+            // check if moving would put player in check
+            state.move(selected, mv);
+            boolean nowInCheck = state.checkInCheck(state.playerIsWhite());
+            state.undo();
+
+            if (nowInCheck) {
+                client.addChat("Performing that move would put you in check!");
+                return;
+            }
+
+            Packet movePacket;
+            Piece originalPiece = state.getPiece(selected);
+            // this case handles pawn promotion
+            if (originalPiece instanceof Pawn && (mv.getY() == 0 || mv.getY() == 7)) {
+                String[] values = new String[] { "Queen", "Rook", "Bishop", "Knight" };
+                Object result = JOptionPane.showInputDialog(null, "What should this pawn be promoted into?","Piece Promotion", JOptionPane.DEFAULT_OPTION, null, values, 0);
+                if (result == null) {
+                    // user canceled the selection, cancel the move
+                    return;
+                }
+                String res = result.toString();
+                movePacket = new PacketMove(selected, mv, res);
+            }
+            else {
+                movePacket = new PacketMove(selected, mv);
+            }
+            client.sendPacket(movePacket);
+            selected = null;
+            allowed = null;
+        }
     }
 
     /**
