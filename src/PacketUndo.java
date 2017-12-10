@@ -1,5 +1,8 @@
 import java.io.IOException;
 
+/**
+ * A packet used to negotiate and perform undo operations.
+ */
 public class PacketUndo implements Packet {
     @Override
     public void processClient(ClientConnection c) {

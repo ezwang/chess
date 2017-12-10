@@ -1,5 +1,8 @@
 import java.io.IOException;
 
+/**
+ * A packet representing chat sent from clients to each other.
+ */
 public class PacketChat implements Packet {
     private String message;
 

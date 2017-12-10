@@ -1,5 +1,8 @@
 import java.io.IOException;
 
+/**
+ * A packet used to negotiate and perform draw operations.
+ */
 public class PacketDraw implements Packet {
     @Override
     public void processClient(ClientConnection c) throws UnsupportedOperationException {

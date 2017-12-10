@@ -1,5 +1,8 @@
 import java.io.IOException;
 
+/**
+ * A packet that notifies the client that the game has ended.
+ */
 public class PacketEnd implements Packet {
     public enum EndResult {
         WHITE,

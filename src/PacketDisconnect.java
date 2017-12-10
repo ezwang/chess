@@ -1,8 +1,7 @@
 import java.io.IOException;
 
 /**
- * A packet that represents the opponent disconnecting
- * from the server.
+ * A packet that represents the opponent disconnecting from the server.
  */
 public class PacketDisconnect implements Packet {
     @Override
